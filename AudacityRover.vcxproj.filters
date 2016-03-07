@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Pilot">
+      <UniqueIdentifier>{cf7a1a2f-e823-48e8-bcd2-1d4b7bd5c365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Pilot">
+      <UniqueIdentifier>{f65fa784-1f6a-40d2-b714-0651a3532875}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Camera">
+      <UniqueIdentifier>{aaab920c-ff38-4a5a-9eb6-54c498ef17af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{cc6f52e3-ea88-4d11-8993-e1940e706683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Communication">
+      <UniqueIdentifier>{80318331-66bc-4869-b15b-fcd4beb74fdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Communication">
+      <UniqueIdentifier>{32877d60-f37d-445b-a7d8-dc07c646d160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Command">
+      <UniqueIdentifier>{57318938-5339-4884-9463-e8514e72c6e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Command">
+      <UniqueIdentifier>{49b606e5-663a-44ba-b708-56cb2de2851e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Pilot\RemotePilotGoPiGo.h">
+      <Filter>Header Files\Pilot</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\CameraRaspi.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Command\CommandQueueDefault.h">
+      <Filter>Header Files\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Communication\CommunicationJumpropes.h">
+      <Filter>Header Files\Communication</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Pilot\RemotePilotGoPiGo.cpp">
+      <Filter>Source Files\Pilot</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\CameraRaspi.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Command\CommandQueueDefault.cpp">
+      <Filter>Source Files\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Communication\CommunicationJumpropes.cpp">
+      <Filter>Source Files\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

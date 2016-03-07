@@ -1,0 +1,9 @@
+[submodule "lib/OpenALRF"]
+	path = lib/OpenALRF
+	url = https://github.com/partouf/OpenALRF.git
+[submodule "lib/GoPiGo"]
+	path = lib/GoPiGo
+	url = https://github.com/partouf/GoPiGoCPP.git
+[submodule "lib/Crosscables"]
+	path = lib/Crosscables
+	url = https://github.com/partouf/Crosscables.git
