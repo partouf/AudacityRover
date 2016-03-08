@@ -2,4 +2,4 @@ os:
   - linux
 language: cpp
 compiler: clang
-script: build.sh
+script: sh build.sh
