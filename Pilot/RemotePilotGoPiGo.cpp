@@ -26,6 +26,11 @@ OpenALRF::RemotePilotGoPiGo::RemotePilotGoPiGo() : IRemotePilot()
 #else
    MainBoard = new GoPiGo::LinuxBoard(1);
 #endif
+   
+   if (!MainBoard->Connect())
+   {
+      throw MainBoard->LastKnownError;
+   }
 
    Wheels = new GoPiGo::Wheels(MainBoard);
    WheelEncoders = new GoPiGo::WheelEncoders(MainBoard);

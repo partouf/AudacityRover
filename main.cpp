@@ -17,5 +17,9 @@ int main()
    OpenALRF::Command World{ OpenALRF::modCamera, OpenALRF::actCameraCapture, 0, 0 };
    Queue.Add(World);
 
+
+   Queue.Process();
+   Queue.Process();
+
    return 1;
 }
