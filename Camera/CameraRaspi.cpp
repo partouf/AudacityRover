@@ -14,6 +14,6 @@ void OpenALRF::CameraRaspi::TakePicture()
    // todo: use library
 
    auto ts = GetCurrentTimestamp();
-   std::string cmd = "raspistil -o " + std::to_string(ts) + ".png";
+   std::string cmd = "raspistill -o " + std::to_string(ts) + ".png";
    system(cmd.c_str());
 }
