@@ -8,7 +8,7 @@ OBJ_MAIN = main.o
 
 OBJ = $(OBJ_COMMUNICATION) $(OBJ_COMMAND) $(OBJ_PILOT) $(OBJ_CAMERA) $(OBJ_MAIN)
 LINKOBJ = $(OBJ)
-LIBS = -L"./lib/GoPiGo" -L"./lib/Crosscables/Groundfloor" -L"./lib/Crosscables/Jumpropes" -L"./lib/OpenALRF" -lGoPiGo -lOpenALRF -lJumpropes -lGroundfloor
+LIBS = -L"./lib/GoPiGo" -L"./lib/Crosscables/libGroundfloor" -L"./lib/Crosscables/libJumpropes" -L"./lib/OpenALRF" -lGoPiGo -lOpenALRF -lJumpropes -lGroundfloor
 BIN  = AudacityRover
 CXXINCS = -I"./lib" -I"./lib/Crosscables/include"
 CXXFLAGS = $(CXXINCS) -fexceptions -std=c++11 -O2
