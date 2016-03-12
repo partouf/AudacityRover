@@ -4,9 +4,10 @@ OBJ_COMMUNICATION = Communication/CommunicationJumpropes.o
 OBJ_COMMAND = Command/CommandQueueDefault.o
 OBJ_PILOT = Pilot/RemotePilotGoPiGo.o
 OBJ_CAMERA = Camera/CameraRaspi.o
+OBJ_SYSTEM = System/WatchCat.o
 OBJ_MAIN = main.o
 
-OBJ = $(OBJ_COMMUNICATION) $(OBJ_COMMAND) $(OBJ_PILOT) $(OBJ_CAMERA) $(OBJ_MAIN)
+OBJ = $(OBJ_COMMUNICATION) $(OBJ_COMMAND) $(OBJ_PILOT) $(OBJ_CAMERA) $(OBJ_SYSTEM) $(OBJ_MAIN)
 LINKOBJ = $(OBJ)
 LIBS = -L"./lib/GoPiGo" -L"./lib/Crosscables/libGroundfloor" -L"./lib/Crosscables/libJumpropes" -L"./lib/OpenALRF" -lGoPiGo -lOpenALRF -lJumpropes -lGroundfloor
 BIN  = AudacityRover
@@ -32,6 +33,9 @@ Pilot/RemotePilotGoPiGo.o: Pilot/RemotePilotGoPiGo.cpp
 
 Camera/CameraRaspi.o: Camera/CameraRaspi.cpp
 	$(CXX) -c Camera/CameraRaspi.cpp -o Camera/CameraRaspi.o $(CXXFLAGS)
+
+System/WatchCat.o: System/WatchCat.cpp
+	$(CXX) -c System/WatchCat.cpp -o System/WatchCat.o $(CXXFLAGS)
 
 main.o: main.cpp
 	$(CXX) -c main.cpp -o main.o $(CXXFLAGS)
