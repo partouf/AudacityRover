@@ -3,18 +3,52 @@
 #include <OpenALRF/Communication/Communication.h>
 #include <OpenALRF/Command/CommandQueue.h>
 
-namespace OpenALRF
+#include <Jumpropes/ThreadedServer.h>
+#include <Jumpropes/ThreadedConnection.h>
+
+namespace AudacityRover
 {
-   class CommunicationJumpropes : public ICommunication
+   class Connection;
+   class Receiver;
+   class CommunicationJumpropes;
+
+   class Connection : public Jumpropes::ThreadedConnection
    {
    protected:
-      ICommandQueue *CmdQueue;
+      Receiver *Server;
+      void newMessageReceived(const String * sMessage) override;
+   public:
+      Connection(Jumpropes::BaseSocket * AClient, Receiver *AReceiver);
+   };
+
+   class Receiver : public Jumpropes::ThreadedServer
+   {
+   protected:
+      CommunicationJumpropes *Comm;
+      Groundfloor::Vector Clients;
+
+      void newClientConnection(Jumpropes::BaseSocket * aClient) override;
+   public:
+      Receiver();
+
+      void SetComm(CommunicationJumpropes *AComm);
+      CommunicationJumpropes *GetComm();
+   };
+
+   class CommunicationJumpropes : public OpenALRF::ICommunication
+   {
+   protected:
+      OpenALRF::ICommandQueue *CmdQueue;
       std::string incomingdata;
+
+      Receiver Server;
 
       void LoadFromBackLog();
    public:
-      CommunicationJumpropes(ICommandQueue *Queue);
+      CommunicationJumpropes(OpenALRF::ICommandQueue *Queue);
 
       void Process();
+
+      OpenALRF::ICommandQueue *GetCmdQueue();
    };
 };
