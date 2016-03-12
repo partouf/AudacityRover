@@ -7,29 +7,29 @@
 #include <OpenALRF/System/System.h>
 #include <vector>
 
-namespace OpenALRF
+namespace AudacityRover
 {
-   class CommandQueue : public ICommandQueue
+   class CommandQueue : public OpenALRF::ICommandQueue
    {
    protected:
-      std::vector<Command> Queue;
+      std::vector<OpenALRF::Command> Queue;
 
-      IRemotePilot *Pilot;
-      IAutoPilot *Auto;
-      IMainCamera *MainCamera;
-      ISystem *System;
+      OpenALRF::IRemotePilot *Pilot;
+      OpenALRF::IAutoPilot *Auto;
+      OpenALRF::IMainCamera *MainCamera;
+      OpenALRF::ISystem *System;
 
       void Init();
 
       void DoNextCommand();
-      void DoCommand(Command ACmd);
+      void DoCommand(OpenALRF::Command ACmd);
    public:
       CommandQueue();
 
-      void Add(Command ACmd);
+      void Add(OpenALRF::Command ACmd);
 
       void Process();
 
-      ISystem *GetSystem();
+      OpenALRF::ISystem *GetSystem();
    };
 };

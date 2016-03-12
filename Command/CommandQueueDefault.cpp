@@ -2,72 +2,72 @@
 
 #include "../Pilot/RemotePilotGoPiGo.h"
 #include "../Camera/CameraRaspi.h"
-#include <OpenALRF/System/SystemLinux.h>
+#include "../System/SystemAudacity.h"
 
-void OpenALRF::CommandQueue::Init()
+void AudacityRover::CommandQueue::Init()
 {
-   System = new SystemLinux();
-   Pilot = new RemotePilotGoPiGo();
+   System = new AudacityRover::SystemAudacity();
+   Pilot = new AudacityRover::RemotePilotGoPiGo();
    Auto = nullptr;// new AutoPilotDefault();
-   MainCamera = new CameraRaspi();
+   MainCamera = new AudacityRover::CameraRaspi();
 }
 
-void OpenALRF::CommandQueue::DoNextCommand()
+void AudacityRover::CommandQueue::DoNextCommand()
 {
    if (Queue.size() > 0)
    {
-      Command cmd = Queue.front();
+      OpenALRF::Command cmd = Queue.front();
       Queue.erase(Queue.begin());
 
       DoCommand(cmd);
    }
 }
 
-void OpenALRF::CommandQueue::DoCommand(Command ACmd)
+void AudacityRover::CommandQueue::DoCommand(OpenALRF::Command ACmd)
 {
-   if (ACmd.Module == modSystem)
+   if (ACmd.Module == OpenALRF::modSystem)
    {
-      if (ACmd.Action == actSystemReboot)
+      if (ACmd.Action == OpenALRF::actSystemReboot)
       {
          System->RebootNow();
       }
-      else if (ACmd.Action == actSystemRestartNetIF)
+      else if (ACmd.Action == OpenALRF::actSystemRestartNetIF)
       {
          System->RestartNetworkInterface(ACmd.param3);
       }
    }
-   else if (ACmd.Module == modCamera)
+   else if (ACmd.Module == OpenALRF::modCamera)
    {
-      if (ACmd.Action == actCameraCapture)
+      if (ACmd.Action == OpenALRF::actCameraCapture)
       {
          MainCamera->TakePicture();
       }
    }
-   else if (ACmd.Module == modRemotePilot)
+   else if (ACmd.Module == OpenALRF::modRemotePilot)
    {
-      if (ACmd.Action == actRemotePilotForward)
+      if (ACmd.Action == OpenALRF::actRemotePilotForward)
       {
          Pilot->Forward(static_cast<OpenALRF::distance_t>(ACmd.param1));
       }
    }
 }
 
-OpenALRF::CommandQueue::CommandQueue() : ICommandQueue()
+AudacityRover::CommandQueue::CommandQueue() : ICommandQueue()
 {
    Init();
 }
 
-void OpenALRF::CommandQueue::Add(Command ACmd)
+void AudacityRover::CommandQueue::Add(OpenALRF::Command ACmd)
 {
    Queue.push_back(ACmd);
 }
 
-void OpenALRF::CommandQueue::Process()
+void AudacityRover::CommandQueue::Process()
 {
    DoNextCommand();
 }
 
-OpenALRF::ISystem * OpenALRF::CommandQueue::GetSystem()
+OpenALRF::ISystem * AudacityRover::CommandQueue::GetSystem()
 {
    return this->System;
 }

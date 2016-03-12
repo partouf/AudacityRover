@@ -4,7 +4,7 @@ OBJ_COMMUNICATION = Communication/CommunicationJumpropes.o
 OBJ_COMMAND = Command/CommandQueueDefault.o
 OBJ_PILOT = Pilot/RemotePilotGoPiGo.o
 OBJ_CAMERA = Camera/CameraRaspi.o
-OBJ_SYSTEM = System/WatchCat.o
+OBJ_SYSTEM = System/WatchCat.o System/SystemAudacity.o
 OBJ_MAIN = main.o
 
 OBJ = $(OBJ_COMMUNICATION) $(OBJ_COMMAND) $(OBJ_PILOT) $(OBJ_CAMERA) $(OBJ_SYSTEM) $(OBJ_MAIN)
@@ -36,6 +36,9 @@ Camera/CameraRaspi.o: Camera/CameraRaspi.cpp
 
 System/WatchCat.o: System/WatchCat.cpp
 	$(CXX) -c System/WatchCat.cpp -o System/WatchCat.o $(CXXFLAGS)
+
+System/SystemAudacity.o: System/SystemAudacity.cpp
+	$(CXX) -c System/SystemAudacity.cpp -o System/SystemAudacity.o $(CXXFLAGS)
 
 main.o: main.cpp
 	$(CXX) -c main.cpp -o main.o $(CXXFLAGS)

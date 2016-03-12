@@ -2,9 +2,9 @@
 
 #include <OpenALRF/Camera/MainCamera.h>
 
-namespace OpenALRF
+namespace AudacityRover
 {
-   class CameraRaspi : public IMainCamera
+   class CameraRaspi : public OpenALRF::IMainCamera
    {
    public:
       CameraRaspi();

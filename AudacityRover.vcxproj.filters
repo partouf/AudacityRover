@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Command">
       <UniqueIdentifier>{49b606e5-663a-44ba-b708-56cb2de2851e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{9bd99dbf-1d97-4a54-a88a-15bc10f503ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pilot\RemotePilotGoPiGo.h">
@@ -50,6 +53,12 @@
     </ClInclude>
     <ClInclude Include="Communication\CommunicationJumpropes.h">
       <Filter>Header Files\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="System\WatchCat.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SystemAudacity.h">
+      <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +75,12 @@
       <Filter>Source Files\Communication</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\WatchCat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SystemAudacity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

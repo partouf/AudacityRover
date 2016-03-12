@@ -4,9 +4,9 @@
 
 #include <GoPiGo/gopigo.h>
 
-namespace OpenALRF
+namespace AudacityRover
 {
-   class RemotePilotGoPiGo : public IRemotePilot
+   class RemotePilotGoPiGo : public OpenALRF::IRemotePilot
    {
    private:
       GoPiGo::IBoard *MainBoard;
@@ -18,13 +18,13 @@ namespace OpenALRF
       RemotePilotGoPiGo();
       ~RemotePilotGoPiGo();
 
-      virtual void Forward(distance_t ADistance) override;
+      virtual void Forward(OpenALRF::distance_t ADistance) override;
 
-      virtual void Backward(distance_t ADistance) override;
+      virtual void Backward(OpenALRF::distance_t ADistance) override;
 
-      virtual void Left(degrees_t AAngle) override;
+      virtual void Left(OpenALRF::degrees_t AAngle) override;
 
-      virtual void Right(degrees_t AAngle) override;
+      virtual void Right(OpenALRF::degrees_t AAngle) override;
 
       virtual void Stop() override;
    };

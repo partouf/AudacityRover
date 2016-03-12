@@ -12,7 +12,7 @@
 
 #include "System/WatchCat.h"
 
-OpenALRF::CommandQueue Queue;
+AudacityRover::CommandQueue Queue;
 OpenALRF::ISystem *System = Queue.GetSystem();
 
 void RebootSystem()

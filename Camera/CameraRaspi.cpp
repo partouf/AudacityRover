@@ -4,16 +4,16 @@
 #include <string>
 #include <OpenALRF/Common/Timing.h>
 
-OpenALRF::CameraRaspi::CameraRaspi() : IMainCamera()
+AudacityRover::CameraRaspi::CameraRaspi() : OpenALRF::IMainCamera()
 {
 
 }
 
-void OpenALRF::CameraRaspi::TakePicture()
+void AudacityRover::CameraRaspi::TakePicture()
 {
    // todo: use library
 
-   auto ts = GetCurrentTimestamp();
+   auto ts = OpenALRF::GetCurrentTimestamp();
    std::string cmd = "raspistill -vf -o " + std::to_string(ts) + ".png";
    system(cmd.c_str());
 }

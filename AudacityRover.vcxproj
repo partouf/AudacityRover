@@ -86,9 +86,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);USENULLBOARD</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Patrick\Documents\GitHub\AudacityRover\lib\Crosscables\include;C:\Users\Patrick\Documents\GitHub\AudacityRover\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OpenALRF.lib;GoPiGo.lib;libJumpropes.lib;libGroundfloor.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenALRF.lib;GoPiGo.lib;libJumpropes.lib;libGroundfloor.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(TargetDir);$(SolutionDir)lib\Crosscables\$(ConfigurationName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -98,9 +99,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);USENULLBOARD</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Patrick\Documents\GitHub\AudacityRover\lib\Crosscables\include;C:\Users\Patrick\Documents\GitHub\AudacityRover\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OpenALRF.lib;GoPiGo.lib;libJumpropes.lib;libGroundfloor.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenALRF.lib;GoPiGo.lib;libJumpropes.lib;libGroundfloor.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(TargetDir);$(SolutionDir)lib\Crosscables\$(ConfigurationName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -112,11 +114,12 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);USENULLBOARD</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Patrick\Documents\GitHub\AudacityRover\lib\Crosscables\include;C:\Users\Patrick\Documents\GitHub\AudacityRover\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenALRF.lib;GoPiGo.lib;libJumpropes.lib;libGroundfloor.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenALRF.lib;GoPiGo.lib;libJumpropes.lib;libGroundfloor.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(TargetDir);$(SolutionDir)lib\Crosscables\$(ConfigurationName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -128,11 +131,12 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);USENULLBOARD</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Patrick\Documents\GitHub\AudacityRover\lib\Crosscables\include;C:\Users\Patrick\Documents\GitHub\AudacityRover\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenALRF.lib;GoPiGo.lib;libJumpropes.lib;libGroundfloor.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenALRF.lib;GoPiGo.lib;libJumpropes.lib;libGroundfloor.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(TargetDir);$(SolutionDir)lib\Crosscables\$(ConfigurationName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -142,12 +146,16 @@
     <ClCompile Include="Communication\CommunicationJumpropes.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pilot\RemotePilotGoPiGo.cpp" />
+    <ClCompile Include="System\SystemAudacity.cpp" />
+    <ClCompile Include="System\WatchCat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\CameraRaspi.h" />
     <ClInclude Include="Command\CommandQueueDefault.h" />
     <ClInclude Include="Communication\CommunicationJumpropes.h" />
     <ClInclude Include="Pilot\RemotePilotGoPiGo.h" />
+    <ClInclude Include="System\SystemAudacity.h" />
+    <ClInclude Include="System\WatchCat.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

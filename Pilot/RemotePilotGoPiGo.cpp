@@ -6,7 +6,7 @@
 #include <GoPiGo/OS/linux.h>
 #endif
 
-void OpenALRF::RemotePilotGoPiGo::ReconnectIfNeeded()
+void AudacityRover::RemotePilotGoPiGo::ReconnectIfNeeded()
 {
    if (!MainBoard->IsConnected())
    {
@@ -19,7 +19,7 @@ void OpenALRF::RemotePilotGoPiGo::ReconnectIfNeeded()
    }
 }
 
-OpenALRF::RemotePilotGoPiGo::RemotePilotGoPiGo() : IRemotePilot()
+AudacityRover::RemotePilotGoPiGo::RemotePilotGoPiGo() : OpenALRF::IRemotePilot()
 {
 #ifdef USENULLBOARD
    MainBoard = new GoPiGo::NullBoard(1);
@@ -36,13 +36,13 @@ OpenALRF::RemotePilotGoPiGo::RemotePilotGoPiGo() : IRemotePilot()
    WheelEncoders = new GoPiGo::WheelEncoders(MainBoard);
 }
 
-OpenALRF::RemotePilotGoPiGo::~RemotePilotGoPiGo()
+AudacityRover::RemotePilotGoPiGo::~RemotePilotGoPiGo()
 {
    delete Wheels;
    delete MainBoard;
 }
 
-void OpenALRF::RemotePilotGoPiGo::Forward(distance_t ADistance)
+void AudacityRover::RemotePilotGoPiGo::Forward(OpenALRF::distance_t ADistance)
 {
    ReconnectIfNeeded();
 
@@ -81,22 +81,22 @@ void OpenALRF::RemotePilotGoPiGo::Forward(distance_t ADistance)
    Stop();
 }
 
-void OpenALRF::RemotePilotGoPiGo::Backward(distance_t ADistance)
+void AudacityRover::RemotePilotGoPiGo::Backward(OpenALRF::distance_t ADistance)
 {
    // todo: implement
 }
 
-void OpenALRF::RemotePilotGoPiGo::Left(degrees_t AAngle)
+void AudacityRover::RemotePilotGoPiGo::Left(OpenALRF::degrees_t AAngle)
 {
    // todo: implement
 }
 
-void OpenALRF::RemotePilotGoPiGo::Right(degrees_t AAngle)
+void AudacityRover::RemotePilotGoPiGo::Right(OpenALRF::degrees_t AAngle)
 {
    // todo: implement
 }
 
-void OpenALRF::RemotePilotGoPiGo::Stop()
+void AudacityRover::RemotePilotGoPiGo::Stop()
 {
    Wheels->Stop();
 }
