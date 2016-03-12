@@ -2,6 +2,7 @@
 
 #include <OpenALRF/Command/CommandQueue.h>
 #include <OpenALRF/System/System.h>
+#include <cstdint>
 
 namespace AudacityRover
 {
@@ -10,10 +11,10 @@ namespace AudacityRover
    protected:
       OpenALRF::ICommandQueue *Queue;
       OpenALRF::ISystem *System;
-      __int64 TickCount;
-      __int64 ActCount;
-      __int64 CheckCount;
-      __int64 LastCheck;
+      int64_t TickCount;
+      int64_t ActCount;
+      int64_t CheckCount;
+      int64_t LastCheck;
 
       void MinorAct();
       void MajorAct();
