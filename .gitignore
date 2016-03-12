@@ -26,3 +26,11 @@
 *.exe
 *.out
 *.app
+
+# Debug folder
+Debug/
+.vs/
+
+# VS Binaries
+*.suo
+*.sdf
