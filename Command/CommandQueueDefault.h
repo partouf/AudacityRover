@@ -29,5 +29,7 @@ namespace OpenALRF
       void Add(Command ACmd);
 
       void Process();
+
+      ISystem *GetSystem();
    };
 };

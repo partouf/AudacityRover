@@ -25,7 +25,18 @@ void OpenALRF::CommandQueue::DoNextCommand()
 
 void OpenALRF::CommandQueue::DoCommand(Command ACmd)
 {
-   if (ACmd.Module == modCamera)
+   if (ACmd.Module == modSystem)
+   {
+      if (ACmd.Action == actSystemReboot)
+      {
+         System->RebootNow();
+      }
+      else if (ACmd.Action == actSystemRestartNetIF)
+      {
+         System->RestartNetworkInterface(ACmd.param3);
+      }
+   }
+   else if (ACmd.Module == modCamera)
    {
       if (ACmd.Action == actCameraCapture)
       {
@@ -54,4 +65,9 @@ void OpenALRF::CommandQueue::Add(Command ACmd)
 void OpenALRF::CommandQueue::Process()
 {
    DoNextCommand();
+}
+
+OpenALRF::ISystem * OpenALRF::CommandQueue::GetSystem()
+{
+   return this->System;
 }
