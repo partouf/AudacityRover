@@ -40,6 +40,9 @@
     <Filter Include="Header Files\System">
       <UniqueIdentifier>{9bd99dbf-1d97-4a54-a88a-15bc10f503ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\System">
+      <UniqueIdentifier>{b5bb13b9-1e54-4a35-9a65-a9b9c26a4ca2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pilot\RemotePilotGoPiGo.h">
@@ -81,7 +84,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="System\SystemAudacity.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
