@@ -1,0 +1,28 @@
+﻿<Window x:Class="AudacitySimulator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AudacitySimulator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="529.21" Width="638.059">
+    <Grid Margin="0,0,2,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <GroupBox x:Name="groupBox" Header="GroupBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="478" Width="608" Grid.RowSpan="2">
+            <Grid Margin="0,10,-5,-12">
+                <Button x:Name="btnMoveForward" Content="Forward" Margin="10,10,495,421" Click="btnMoveForward_Click" />
+                <Button x:Name="btnBackward" Content="Backward" Margin="111,10,394,421" Click="btnBackward_Click" />
+                <Button x:Name="btnLeft" Content="Left" Margin="10,40,495,391" Click="btnLeft_Click" />
+                <Button x:Name="btnRight" Content="Right" Margin="111,40,394,391" Click="btnRight_Click" />
+                <Button x:Name="btnTakePicture" Content="Take picture" Margin="10,118,495,313" Click="btnTakePicture_Click" />
+                <Button x:Name="btnStop" Content="Stop" Margin="10,72,495,359" Click="btnStop_Click" />
+                <Button Content="Reboot" Margin="10,164,495,267" Click="Button_Click" />
+                <Button x:Name="btnSystemInfoDirect" Content="InfoDirect" Margin="10,211,495,220" Click="btnSystemInfoDirect_Click" />
+            </Grid>
+        </GroupBox>
+
+    </Grid>
+</Window>
