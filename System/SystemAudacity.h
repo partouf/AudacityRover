@@ -10,5 +10,8 @@ namespace AudacityRover
       SystemAudacity();
 
       bool HasValidActiveNetwork() override;
+
+      // Inherited via SystemLinux
+      virtual std::string GetStatusInfo() override;
    };
 }

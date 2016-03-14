@@ -33,12 +33,15 @@ namespace AudacityRover
 
       void SetComm(CommunicationJumpropes *AComm);
       CommunicationJumpropes *GetComm();
+
+      std::string LastSender;
    };
 
    class CommunicationJumpropes : public OpenALRF::ICommunication
    {
    protected:
       OpenALRF::ICommandQueue *CmdQueue;
+
       std::string incomingdata;
 
       Receiver Server;
@@ -47,8 +50,13 @@ namespace AudacityRover
    public:
       CommunicationJumpropes(OpenALRF::ICommandQueue *Queue);
 
-      void Process();
+      void Process() override;
+
+      void SendToStation(const std::string AMessage) override;
 
       OpenALRF::ICommandQueue *GetCmdQueue();
+
+      // Inherited via ICommunication
+      virtual std::string GetStatusInfo() override;
    };
 };

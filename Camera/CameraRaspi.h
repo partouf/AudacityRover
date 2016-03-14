@@ -10,5 +10,7 @@ namespace AudacityRover
       CameraRaspi();
 
       void TakePicture();
+
+      virtual std::string GetStatusInfo() override;
    };
 };

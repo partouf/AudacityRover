@@ -3,6 +3,7 @@
 #include <Jumpropes/ThreadedConnection.h>
 #include <Groundfloor/Materials/Functions.h>
 #include <Groundfloor/Bookshelfs/BValue.h>
+#include <Jumpropes/ClientSocket.h>
 
 AudacityRover::CommunicationJumpropes::CommunicationJumpropes(OpenALRF::ICommandQueue * Queue) : OpenALRF::ICommunication()
 {
@@ -21,13 +22,38 @@ void AudacityRover::CommunicationJumpropes::Process()
    // todo
 }
 
+void AudacityRover::CommunicationJumpropes::SendToStation(const std::string AMessage)
+{
+   Jumpropes::ClientSocket Client;
+   Client.remotePort.set(14666);
+   Client.getRemoteAddress()->ip = this->Server.LastSender;
+   Client.connect();
+
+   Groundfloor::String Data = AMessage;
+   Groundfloor::CommReturnData ErrorInfo;
+
+   if (!Client.send(&Data, &ErrorInfo))
+   {
+      std::cerr << "Failed to send data to " << this->Server.LastSender << " (" << ErrorInfo.errorcode << ")" << std::endl;
+   }
+
+   Client.disconnect();
+}
+
 OpenALRF::ICommandQueue * AudacityRover::CommunicationJumpropes::GetCmdQueue()
 {
    return this->CmdQueue;
 }
 
+std::string AudacityRover::CommunicationJumpropes::GetStatusInfo()
+{
+   return "";
+}
+
 void AudacityRover::Receiver::newClientConnection(Jumpropes::BaseSocket * aClient)
 {
+   LastSender = aClient->getRemoteAddress()->ip.getValue();
+
    Connection *Conn = new Connection(aClient, this);
    Clients.addElement(Conn);
 }
@@ -52,22 +78,29 @@ void AudacityRover::Connection::newMessageReceived(const String * sMessage)
 
    if (sMessage->startsWith_ansi("BINCMD"))
    {
-      char *msg = sMessage->getPointer(0);
-      int32_t cmdlen = msg[0] << 24 || msg[1] << 16 || msg[2] << 8 || msg[3];
+      char *msg = sMessage->getPointer(6);
+      uint32_t cmdlen = (msg[0] << 24) | (msg[1] << 16) | (msg[2] << 8) | msg[3];
 
       OpenALRF::Command BinCmd{ OpenALRF::modVoid, OpenALRF::actVoid, 0, 0, "" };
-      if (cmdlen >= 12)
+      if (cmdlen >= 8)
       {
-         BinCmd.Module = static_cast<OpenALRF::module_t>(msg[4] << 8 || msg[5]);
-         BinCmd.Action = static_cast<OpenALRF::action_t>(msg[6] << 8 || msg[7]);
-         BinCmd.param1 = static_cast<int16_t>(msg[8] << 8 || msg[9]);
-         BinCmd.param2 = static_cast<int16_t>(msg[10] << 8 || msg[11]);
+         BinCmd.Module = static_cast<OpenALRF::module_t>(msg[4] << 8 | msg[5]);
+         BinCmd.Action = static_cast<OpenALRF::action_t>(msg[6] << 8 | msg[7]);
 
-         BinCmd.param3 = "";
-         if (cmdlen > 12)
+         if (cmdlen >= 10)
          {
-            Groundfloor::String StrParam(sMessage->getPointer(12), cmdlen - 12);
-            BinCmd.param3.append(StrParam.getValue(), StrParam.getLength());
+            BinCmd.param1 = static_cast<int16_t>(msg[8] << 8 | msg[9]);
+            if (cmdlen >= 12)
+            {
+               BinCmd.param2 = static_cast<int16_t>(msg[10] << 8 | msg[11]);
+
+               BinCmd.param3 = "";
+               if (cmdlen > 12)
+               {
+                  Groundfloor::String StrParam(sMessage->getPointer(12), cmdlen - 12);
+                  BinCmd.param3.append(StrParam.getValue(), StrParam.getLength());
+               }
+            }
          }
 
          this->Server->GetComm()->GetCmdQueue()->Add(BinCmd);

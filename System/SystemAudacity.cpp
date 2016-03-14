@@ -22,3 +22,8 @@ bool AudacityRover::SystemAudacity::HasValidActiveNetwork()
 
    return HasNetwork;
 }
+
+std::string AudacityRover::SystemAudacity::GetStatusInfo()
+{
+   return std::string();
+}

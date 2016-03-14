@@ -1,5 +1,7 @@
 #include "WatchCat.h"
 
+#include <iostream>
+
 void AudacityRover::WatchCat::MinorAct()
 {
    Queue->Add({ OpenALRF::modSystem, OpenALRF::actSystemRestartNetIF, 0, 0, "eth0" });
@@ -18,6 +20,8 @@ void AudacityRover::WatchCat::MajorAct()
 
 void AudacityRover::WatchCat::CheckAndAct()
 {
+   std::cout << "Meow?" << std::endl;
+
    if (!System->HasValidActiveNetwork())
    {
       CheckCount++;
@@ -46,6 +50,9 @@ AudacityRover::WatchCat::WatchCat(OpenALRF::ISystem *ASystem, OpenALRF::ICommand
    this->System = ASystem;
    this->Queue = AQueue;
    TickCount = 0;
+   LastCheck = 0;
+   ActCount = 0;
+   CheckCount = 0;
 }
 
 void AudacityRover::WatchCat::ForceAction()

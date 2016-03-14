@@ -35,6 +35,10 @@ void AudacityRover::CommandQueue::DoCommand(OpenALRF::Command ACmd)
       {
          System->RestartNetworkInterface(ACmd.param3);
       }
+      else if (ACmd.Action == OpenALRF::actSystemInfoReport)
+      {
+         // todo: redo module system so we can gather info on all modules and use the Comm system here
+      }
    }
    else if (ACmd.Module == OpenALRF::modCamera)
    {
@@ -48,6 +52,22 @@ void AudacityRover::CommandQueue::DoCommand(OpenALRF::Command ACmd)
       if (ACmd.Action == OpenALRF::actRemotePilotForward)
       {
          Pilot->Forward(static_cast<OpenALRF::distance_t>(ACmd.param1));
+      }
+      else if (ACmd.Action == OpenALRF::actRemotePilotBackward)
+      {
+         Pilot->Backward(static_cast<OpenALRF::distance_t>(ACmd.param1));
+      }
+      else if (ACmd.Action == OpenALRF::actRemotePilotLeft)
+      {
+         Pilot->Left(static_cast<OpenALRF::distance_t>(ACmd.param1));
+      }
+      else if (ACmd.Action == OpenALRF::actRemotePilotRight)
+      {
+         Pilot->Right(static_cast<OpenALRF::distance_t>(ACmd.param1));
+      }
+      else if (ACmd.Action == OpenALRF::actRemotePilotStop)
+      {
+         Pilot->Stop();
       }
    }
 }
@@ -70,4 +90,23 @@ void AudacityRover::CommandQueue::Process()
 OpenALRF::ISystem * AudacityRover::CommandQueue::GetSystem()
 {
    return this->System;
+}
+
+std::string AudacityRover::CommandQueue::GetStatusInfo()
+{
+   std::string Data;
+
+   Data += "<system>";
+   Data += System->GetStatusInfo();
+   Data += "</system>";
+
+   Data += "<camera>";
+   Data += MainCamera->GetStatusInfo();
+   Data += "</camera>";
+
+   Data += "<remotepilot>";
+   Data += Pilot->GetStatusInfo();
+   Data += "</remotepilot>";
+
+   return Data;
 }

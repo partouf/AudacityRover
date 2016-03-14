@@ -14,6 +14,8 @@ namespace AudacityRover
       GoPiGo::WheelEncoders *WheelEncoders;
 
       void ReconnectIfNeeded();
+
+      void MovementCheckLoop();
    public:
       RemotePilotGoPiGo();
       ~RemotePilotGoPiGo();
@@ -27,5 +29,8 @@ namespace AudacityRover
       virtual void Right(OpenALRF::degrees_t AAngle) override;
 
       virtual void Stop() override;
+
+      // Inherited via IRemotePilot
+      virtual std::string GetStatusInfo() override;
    };
 };

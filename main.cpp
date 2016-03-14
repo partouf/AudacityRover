@@ -43,7 +43,7 @@ int main()
                Queue.Process();
                Cat.Process();
 
-               GFMillisleep(10);
+               GFMillisleep(100);
             }
 
          }

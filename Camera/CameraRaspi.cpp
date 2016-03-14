@@ -17,3 +17,8 @@ void AudacityRover::CameraRaspi::TakePicture()
    std::string cmd = "raspistill -vf -o " + std::to_string(ts) + ".png";
    system(cmd.c_str());
 }
+
+std::string AudacityRover::CameraRaspi::GetStatusInfo()
+{
+   return "";
+}

@@ -31,5 +31,8 @@ namespace AudacityRover
       void Process();
 
       OpenALRF::ISystem *GetSystem();
+
+      // Inherited via ICommandQueue
+      virtual std::string GetStatusInfo() override;
    };
 };
