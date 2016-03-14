@@ -51,6 +51,7 @@ void AudacityRover::RemotePilotGoPiGo::Forward(OpenALRF::distance_t ADistance)
 {
    ReconnectIfNeeded();
 
+   Wheels->SetSpeedBothMotors(255);
    WheelEncoders->SetTargeting(true, true, static_cast<GoPiGo::encoderpulses_t>(ADistance * 0.99));
    Wheels->Forward();
 
@@ -64,7 +65,7 @@ void AudacityRover::RemotePilotGoPiGo::MovementCheckLoop()
    GoPiGo::encstatus_t LastStatus = -1;
    int loopduplicates = 0;
 
-   int maxduplicates = 40;
+   int maxduplicates = 35;
    while (loopduplicates < maxduplicates)   // 40*70=2800ms
    {
       auto st = WheelEncoders->GetStatus();
@@ -95,6 +96,7 @@ void AudacityRover::RemotePilotGoPiGo::Backward(OpenALRF::distance_t ADistance)
 {
    ReconnectIfNeeded();
 
+   Wheels->SetSpeedBothMotors(255);
    WheelEncoders->SetTargeting(true, true, static_cast<GoPiGo::encoderpulses_t>(ADistance * 0.99));
    Wheels->Backward();
 
@@ -119,7 +121,7 @@ void AudacityRover::RemotePilotGoPiGo::Left(OpenALRF::degrees_t AAngle)
    this->ReconnectIfNeeded();
 
    this->Wheels->SetSpeedMotor1(0);
-   this->Wheels->SetSpeedMotor2(50);
+   this->Wheels->SetSpeedMotor2(255);
 
    // so given the situation, the vehicle's right tire will travel along the edge of a small circle, which can trace back to an angle
    //  so, we know that if 1 rotation of the wheel is 19cm in travel
@@ -140,7 +142,7 @@ void AudacityRover::RemotePilotGoPiGo::Right(OpenALRF::degrees_t AAngle)
 {
    this->ReconnectIfNeeded();
 
-   this->Wheels->SetSpeedMotor1(50);
+   this->Wheels->SetSpeedMotor1(255);
    this->Wheels->SetSpeedMotor2(0);
 
    double calc = ((23.0 * M_PI) / 360.0) * AAngle;
