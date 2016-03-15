@@ -106,8 +106,8 @@ void AudacityRover::RemotePilotGoPiGo::MovementCheckLoop()
    std::chrono::steady_clock::time_point T9 = std::chrono::steady_clock::now();
    auto TimeDiff = std::chrono::duration_cast<std::chrono::microseconds>(T9 - T0).count();
 
-   LatestMeasuredSpeed1 = (double)Encoders->GetLatestDistance1() / ((double)TimeDiff / 1000.0);   // centimeters per second
-   LatestMeasuredSpeed2 = (double)Encoders->GetLatestDistance2() / ((double)TimeDiff / 1000.0);
+   LatestMeasuredSpeed1 = (double)Encoders->GetLatestDistance1() / (double)TimeDiff;   // centimeters per microsecond?
+   LatestMeasuredSpeed2 = (double)Encoders->GetLatestDistance2() / (double)TimeDiff;
 
    AccumulatedDistanceTraveled1 += Encoders->GetLatestDistance1();
    AccumulatedDistanceTraveled2 += Encoders->GetLatestDistance2();
