@@ -6,6 +6,8 @@
 #include <GoPiGo/OS/linux.h>
 #endif
 
+#include <OpenALRF/Common/Timing.h>
+
 #include <iostream>
 #include <Groundfloor/Bookshelfs/BValue.h>
 
@@ -16,11 +18,6 @@ void AudacityRover::RemotePilotGoPiGo::ReconnectIfNeeded()
    if (!MainBoard->IsConnected())
    {
       MainBoard->Connect();
-   }
-
-   if (!WheelEncoders->IsEnabled())
-   {
-      WheelEncoders->Enable();
    }
 }
 
@@ -38,7 +35,12 @@ AudacityRover::RemotePilotGoPiGo::RemotePilotGoPiGo() : OpenALRF::IRemotePilot()
    }
 
    Wheels = new GoPiGo::Wheels(MainBoard);
-   WheelEncoders = new GoPiGo::WheelEncoders(MainBoard);
+   Encoders = new GoPiGo::WheelEncodersWithErrorDetection(MainBoard);
+
+   LatestMeasuredSpeed1 = 0;
+   LatestMeasuredSpeed2 = 0;
+   AccumulatedDistanceTraveled1 = 0;
+   AccumulatedDistanceTraveled2 = 0;
 }
 
 AudacityRover::RemotePilotGoPiGo::~RemotePilotGoPiGo()
@@ -52,7 +54,10 @@ void AudacityRover::RemotePilotGoPiGo::Forward(OpenALRF::distance_t ADistance)
    ReconnectIfNeeded();
 
    Wheels->SetSpeedBothMotors(255);
-   WheelEncoders->SetTargeting(true, true, static_cast<GoPiGo::encoderpulses_t>(ADistance * 0.99));
+
+   GoPiGo::encoderpulses_t DistanceAsPulseCount = static_cast<GoPiGo::encoderpulses_t>(ADistance * 0.99);
+
+   Encoders->Start(DistanceAsPulseCount, DistanceAsPulseCount);
    Wheels->Forward();
 
    MovementCheckLoop();
@@ -62,31 +67,50 @@ void AudacityRover::RemotePilotGoPiGo::Forward(OpenALRF::distance_t ADistance)
 
 void AudacityRover::RemotePilotGoPiGo::MovementCheckLoop()
 {
-   GoPiGo::encstatus_t LastStatus = -1;
-   int loopduplicates = 0;
+   GoPiGo::encoderpulses_t D1 = -1, D2 = -1;
+   int LoopDuplicates = 0;
+
+   OpenALRF::timestamp_t T0 = OpenALRF::GetCurrentTimestamp();
 
    int maxduplicates = 35;
-   while (loopduplicates < maxduplicates)   // 40*70=2800ms
+   while (LoopDuplicates < maxduplicates)
    {
-      auto st = WheelEncoders->GetStatus();
-      if (st.EncoderStatus == 0)
+      if (Encoders->CheckShouldStop())
       {
          break;
       }
 
-      if (LastStatus == st.EncoderStatus)
+      int IdleCount = 0;
+      if (D1 == Encoders->GetLatestDistance1())
       {
-         loopduplicates++;
+         LoopDuplicates++;
+         IdleCount++;
       }
-      else
+
+      if (D2 == Encoders->GetLatestDistance2())
       {
-         loopduplicates = 0;
+         LoopDuplicates++;
+         IdleCount++;
+      }
+
+      if (IdleCount == 0)
+      {
+         LoopDuplicates = 0;
       }
 
       MainBoard->Sleep(70);
    }
 
-   if (loopduplicates >= maxduplicates)
+   OpenALRF::timestamp_t T9 = OpenALRF::GetCurrentTimestamp();
+   OpenALRF::timestamp_t TimeDiff = T9 - T0;
+
+   LatestMeasuredSpeed1 = (double)Encoders->GetLatestDistance1() / (double)TimeDiff;
+   LatestMeasuredSpeed2 = (double)Encoders->GetLatestDistance2() / (double)TimeDiff;
+
+   AccumulatedDistanceTraveled1 += Encoders->GetLatestDistance1();
+   AccumulatedDistanceTraveled2 += Encoders->GetLatestDistance2();
+
+   if (LoopDuplicates >= maxduplicates)
    {
       std::cerr << "Encoder hasn't indicated any movement for a little while (2.8s)" << std::endl;
    }
@@ -97,7 +121,11 @@ void AudacityRover::RemotePilotGoPiGo::Backward(OpenALRF::distance_t ADistance)
    ReconnectIfNeeded();
 
    Wheels->SetSpeedBothMotors(255);
-   WheelEncoders->SetTargeting(true, true, static_cast<GoPiGo::encoderpulses_t>(ADistance * 0.99));
+
+   GoPiGo::encoderpulses_t DistanceAsPulseCount = static_cast<GoPiGo::encoderpulses_t>(ADistance * 0.99);
+
+   Encoders->Start(DistanceAsPulseCount, DistanceAsPulseCount);
+
    Wheels->Backward();
 
    MovementCheckLoop();
@@ -131,7 +159,9 @@ void AudacityRover::RemotePilotGoPiGo::Left(OpenALRF::degrees_t AAngle)
    double calc = ((23.0 * M_PI) / 360.0) * AAngle;
    OpenALRF::distance_t distance = (OpenALRF::distance_t)calc;
 
-   this->WheelEncoders->SetTargeting(false, true, distance);
+   Encoders->Start(0, distance);
+
+   Wheels->Forward();
 
    MovementCheckLoop();
 
@@ -148,7 +178,9 @@ void AudacityRover::RemotePilotGoPiGo::Right(OpenALRF::degrees_t AAngle)
    double calc = ((23.0 * M_PI) / 360.0) * AAngle;
    OpenALRF::distance_t distance = (OpenALRF::distance_t)calc;
 
-   this->WheelEncoders->SetTargeting(true, false, distance);
+   Encoders->Start(distance, 0);
+
+   Wheels->Forward();
 
    MovementCheckLoop();
 
@@ -183,14 +215,25 @@ std::string AudacityRover::RemotePilotGoPiGo::GetStatusInfo()
    Data += Val.asString()->getValue();
    Data += "</voltage>";
 
-   if (WheelEncoders->IsEnabled())
-   {
-      Data += "<encoderstatus>true</encoderstatus>";
-   }
-   else
-   {
-      Data += "<encoderstatus>false</encoderstatus>";
-   }
+   Val.setInt64(AccumulatedDistanceTraveled1);
+   Data += "<accdistance1>";
+   Data += Val.asString()->getValue();
+   Data += "</accdistance1>";
+
+   Val.setInt64(AccumulatedDistanceTraveled2);
+   Data += "<accdistance2>";
+   Data += Val.asString()->getValue();
+   Data += "</accdistance2>";
+
+   Val.setDouble(LatestMeasuredSpeed1);
+   Data += "<latestspeed1>";
+   Data += Val.asString()->getValue();
+   Data += "</latestspeed1>";
+
+   Val.setDouble(LatestMeasuredSpeed2);
+   Data += "<latestspeed2>";
+   Data += Val.asString()->getValue();
+   Data += "</latestspeed2>";
 
    return Data;
 }

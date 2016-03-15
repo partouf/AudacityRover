@@ -11,7 +11,13 @@ namespace AudacityRover
    private:
       GoPiGo::IBoard *MainBoard;
       GoPiGo::Wheels *Wheels;
-      GoPiGo::WheelEncoders *WheelEncoders;
+      GoPiGo::WheelEncodersWithErrorDetection *Encoders;
+
+      int64_t AccumulatedDistanceTraveled1;
+      int64_t AccumulatedDistanceTraveled2;
+
+      double LatestMeasuredSpeed1;
+      double LatestMeasuredSpeed2;
 
       void ReconnectIfNeeded();
 
