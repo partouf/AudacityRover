@@ -74,8 +74,6 @@ AudacityRover::CommunicationJumpropes * AudacityRover::Receiver::GetComm()
 
 void AudacityRover::Connection::newMessageReceived(const String * sMessage)
 {
-   std::cout << sMessage->getValue() << std::endl;
-
    if (sMessage->startsWith_ansi("BINCMD"))
    {
       char *msg = sMessage->getPointer(6);
