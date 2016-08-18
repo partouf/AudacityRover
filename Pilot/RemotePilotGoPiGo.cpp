@@ -14,7 +14,7 @@
 
 using namespace std::chrono;
 
-#if !(defined(GF_OS_WIN32) || (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7) || defined(__clang__))
+#if defined(__clang__)
 namespace std {
    namespace chrono {
       typedef monotonic_clock steady_clock;
