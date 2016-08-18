@@ -26,5 +26,19 @@ bool AudacityRover::SystemAudacity::HasValidActiveNetwork()
 
 std::string AudacityRover::SystemAudacity::GetStatusInfo()
 {
-   return std::string();
+   std::string suggeststatusstr = "";
+
+   switch (CurrentStatus()) {
+   case OpenALRF::statStopped:
+      suggeststatusstr = "stopped";
+      break;
+   case OpenALRF::statRunning:
+      suggeststatusstr = "running";
+      break;
+   case OpenALRF::statWaiting:
+      suggeststatusstr = "waiting";
+      break;
+   }
+
+   return suggeststatusstr;
 }
