@@ -7,3 +7,12 @@
 [submodule "lib/Crosscables"]
 	path = lib/Crosscables
 	url = https://github.com/partouf/Crosscables.git
+[submodule "lib/raspicam"]
+	path = lib/raspicam
+	url = https://github.com/partouf/raspicam.git
+[submodule "lib/RTIMULib2"]
+	path = lib/RTIMULib2
+	url = git://github.com/partouf/RTIMULib2.git
+[submodule "lib/cpp-sense-hat"]
+	path = lib/cpp-sense-hat
+	url = git://github.com/partouf/cpp-sense-hat.git
