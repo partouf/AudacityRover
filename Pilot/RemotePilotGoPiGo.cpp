@@ -12,6 +12,17 @@
 #include <Groundfloor/Bookshelfs/BValue.h>
 #include <chrono>
 
+using namespace std::chrono;
+
+#if !(defined(GF_OS_WIN32) || (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7) || defined(__clang__))
+namespace std {
+   namespace chrono {
+      typedef monotonic_clock steady_clock;
+   }
+}
+#define is_steady is_monotonic
+#endif
+
 constexpr auto M_PI = 3.14159265358979323846;
 
 void AudacityRover::RemotePilotGoPiGo::ReconnectIfNeeded()
@@ -71,7 +82,7 @@ void AudacityRover::RemotePilotGoPiGo::MovementCheckLoop()
    GoPiGo::encoderpulses_t D1 = -1, D2 = -1;
    int LoopDuplicates = 0;
 
-   std::chrono::steady_clock::time_point T0 = std::chrono::steady_clock::now();
+   auto T0 = steady_clock::now();
 
    int maxduplicates = 35;
    while (LoopDuplicates < maxduplicates)
@@ -105,8 +116,8 @@ void AudacityRover::RemotePilotGoPiGo::MovementCheckLoop()
    }
 
 
-   std::chrono::steady_clock::time_point T9 = std::chrono::steady_clock::now();
-   auto TimeDiff = std::chrono::duration_cast<std::chrono::microseconds>(T9 - T0).count();
+   auto T9 = steady_clock::now();
+   auto TimeDiff = duration_cast<microseconds>(T9 - T0).count();
 
    LatestMeasuredSpeed1 = (double)Encoders->GetLatestDistance1() / ((double)TimeDiff / 1000000.0);   // centimeters per second?
    LatestMeasuredSpeed2 = (double)Encoders->GetLatestDistance2() / ((double)TimeDiff / 1000000.0);
