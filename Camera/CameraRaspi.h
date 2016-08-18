@@ -2,7 +2,7 @@
 
 #include <OpenALRF/Camera/MainCamera.h>
 #include <OpenALRF/Common/CapturedImage.h>
-#include "raspicam_still_interface.h"
+#include <raspicam/src/raspicam_still_interface.h>
 
 namespace AudacityRover
 {

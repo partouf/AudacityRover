@@ -7,9 +7,9 @@
 #include <Groundfloor/Atoms/Defines.h>
 
 #ifdef GF_OS_WIN32
-#include "raspicam_still_cvcam.h"
+#include <raspicam/src/raspicam_still_cvcam.h>
 #else
-#include "raspicam_still.h"
+#include <raspicam/src/raspicam_still.h>
 #endif
 
 #include <OpenALRF/ImageProcessing/Software.h>
