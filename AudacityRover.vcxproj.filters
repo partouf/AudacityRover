@@ -43,6 +43,12 @@
     <Filter Include="Source Files\System">
       <UniqueIdentifier>{b5bb13b9-1e54-4a35-9a65-a9b9c26a4ca2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Sensors">
+      <UniqueIdentifier>{e61c4c11-7937-47f7-9e48-9deacad01b49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sensors">
+      <UniqueIdentifier>{7306e227-210b-4427-b8ab-084dca8b86e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pilot\RemotePilotGoPiGo.h">
@@ -57,10 +63,31 @@
     <ClInclude Include="Communication\CommunicationJumpropes.h">
       <Filter>Header Files\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="System\WatchCat.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="System\SystemAudacity.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Communication\SensorDataTransmitter.h">
+      <Filter>Header Files\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Logging.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Sensors\TemperatureSenseHAT.h">
+      <Filter>Header Files\Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="System\WatchCat.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Communication\SensorDataReceiver.h">
+      <Filter>Header Files\Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Configuration.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Modules.h">
       <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,11 +107,29 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="System\WatchCat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="System\SystemAudacity.cpp">
       <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Communication\SensorDataTransmitter.cpp">
+      <Filter>Source Files\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Logging.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Sensors\TemperatureSenseHAT.cpp">
+      <Filter>Source Files\Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="System\WatchCat.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Communication\SensorDataReceiver.cpp">
+      <Filter>Source Files\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Configuration.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Modules.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

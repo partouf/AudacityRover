@@ -1,15 +1,10 @@
 #include "CommandQueueDefault.h"
 
-#include "../Pilot/RemotePilotGoPiGo.h"
-#include "../Camera/CameraRaspi.h"
-#include "../System/SystemAudacity.h"
+#include "../System/Modules.h"
 
 void AudacityRover::CommandQueue::Init()
 {
-   System = new AudacityRover::SystemAudacity();
-   Pilot = new AudacityRover::RemotePilotGoPiGo();
-   Auto = nullptr;// new AutoPilotDefault();
-   MainCamera = new AudacityRover::CameraRaspi();
+
 }
 
 void AudacityRover::CommandQueue::DoNextCommand()
@@ -25,6 +20,10 @@ void AudacityRover::CommandQueue::DoNextCommand()
 
 void AudacityRover::CommandQueue::DoCommand(OpenALRF::Command ACmd)
 {
+   auto Pilot = Modules::Instance()->Pilot;
+   auto System = Modules::Instance()->System;
+   auto MainCamera = Modules::Instance()->MainCamera;
+
    if (ACmd.Module == OpenALRF::modSystem)
    {
       if (ACmd.Action == OpenALRF::actSystemReboot)
@@ -38,6 +37,18 @@ void AudacityRover::CommandQueue::DoCommand(OpenALRF::Command ACmd)
       else if (ACmd.Action == OpenALRF::actSystemInfoReport)
       {
          // todo: redo module system so we can gather info on all modules and use the Comm system here
+      }
+      else if (ACmd.Action == OpenALRF::actSystemResume)
+      {
+         DoResume();
+      }
+      else if (ACmd.Action == OpenALRF::actSystemWait)
+      {
+         DoWait();
+      }
+      else if (ACmd.Action == OpenALRF::actSystemStop)
+      {
+         DoStop();
       }
    }
    else if (ACmd.Module == OpenALRF::modCamera)
@@ -72,6 +83,22 @@ void AudacityRover::CommandQueue::DoCommand(OpenALRF::Command ACmd)
    }
 }
 
+void AudacityRover::CommandQueue::DoStop()
+{
+   Modules::Instance()->Pilot->Stop();
+   Modules::Instance()->System->ChangeStatus(OpenALRF::statStopped);
+}
+
+void AudacityRover::CommandQueue::DoWait()
+{
+   Modules::Instance()->System->ChangeStatus(OpenALRF::statWaiting);
+}
+
+void AudacityRover::CommandQueue::DoResume()
+{
+   Modules::Instance()->System->ChangeStatus(OpenALRF::statRunning);
+}
+
 AudacityRover::CommandQueue::CommandQueue() : ICommandQueue()
 {
    Init();
@@ -87,26 +114,25 @@ void AudacityRover::CommandQueue::Process()
    DoNextCommand();
 }
 
-OpenALRF::ISystem * AudacityRover::CommandQueue::GetSystem()
-{
-   return this->System;
-}
-
 std::string AudacityRover::CommandQueue::GetStatusInfo()
 {
    std::string Data;
 
    Data += "<system>";
-   Data += System->GetStatusInfo();
+   Data += Modules::Instance()->System->GetStatusInfo();
    Data += "</system>";
 
    Data += "<camera>";
-   Data += MainCamera->GetStatusInfo();
+   Data += Modules::Instance()->MainCamera->GetStatusInfo();
    Data += "</camera>";
 
    Data += "<remotepilot>";
-   Data += Pilot->GetStatusInfo();
+   Data += Modules::Instance()->Pilot->GetStatusInfo();
    Data += "</remotepilot>";
+
+   Data += "<sensorbus>";
+   Data += Modules::Instance()->SensorBus->GetStatusInfo();
+   Data += "</sensorbus>";
 
    return Data;
 }

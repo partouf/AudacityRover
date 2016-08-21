@@ -5,6 +5,7 @@
 #include <OpenALRF/Pilot/AutoPilot.h>
 #include <OpenALRF/Camera/MainCamera.h>
 #include <OpenALRF/System/System.h>
+#include <OpenALRF/Communication/SensorBus.h>
 #include <vector>
 
 namespace AudacityRover
@@ -14,15 +15,14 @@ namespace AudacityRover
    protected:
       std::vector<OpenALRF::Command> Queue;
 
-      OpenALRF::IRemotePilot *Pilot;
-      OpenALRF::IAutoPilot *Auto;
-      OpenALRF::IMainCamera *MainCamera;
-      OpenALRF::ISystem *System;
-
       void Init();
 
       void DoNextCommand();
       void DoCommand(OpenALRF::Command ACmd);
+
+      void DoStop();
+      void DoWait();
+      void DoResume();
    public:
       CommandQueue();
 
@@ -30,9 +30,7 @@ namespace AudacityRover
 
       void Process();
 
-      OpenALRF::ISystem *GetSystem();
-
       // Inherited via ICommandQueue
-      virtual std::string GetStatusInfo() override;
+      std::string GetStatusInfo() override;
    };
 };

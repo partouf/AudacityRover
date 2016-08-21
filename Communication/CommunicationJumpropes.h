@@ -5,6 +5,9 @@
 
 #include <Jumpropes/ThreadedServer.h>
 #include <Jumpropes/ThreadedConnection.h>
+#include <Jumpropes/ClientSocket.h>
+
+#include <vector>
 
 namespace AudacityRover
 {
@@ -16,7 +19,19 @@ namespace AudacityRover
    {
    protected:
       Receiver *Server;
+      String ReceptionBuffer;
+      std::vector<OpenALRF::OrderedCommand> OrderedCommandBuffer;
+
       void newMessageReceived(const String * sMessage) override;
+
+      OpenALRF::OrderedCommand ReadNextCommand(String *AData);
+
+      void ReplyBinaryOK();
+      void ReplyBinaryFail();
+      void ReplyHTTPOK();
+      void ReplyHTTPFail();
+      void ReplyWithFile(const String *AFile);
+      Groundfloor::String GetHTTPHeaderForFile(const Groundfloor::String * AFile);
    public:
       Connection(Jumpropes::BaseSocket * AClient, Receiver *AReceiver);
    };
@@ -24,15 +39,11 @@ namespace AudacityRover
    class Receiver : public Jumpropes::ThreadedServer
    {
    protected:
-      CommunicationJumpropes *Comm;
       Groundfloor::Vector Clients;
 
       void newClientConnection(Jumpropes::BaseSocket * aClient) override;
    public:
       Receiver();
-
-      void SetComm(CommunicationJumpropes *AComm);
-      CommunicationJumpropes *GetComm();
 
       std::string LastSender;
    };
@@ -40,21 +51,18 @@ namespace AudacityRover
    class CommunicationJumpropes : public OpenALRF::ICommunication
    {
    protected:
-      OpenALRF::ICommandQueue *CmdQueue;
-
       std::string incomingdata;
 
       Receiver Server;
 
+      void InitializeStationConnection(Jumpropes::ClientSocket &Client);
       void LoadFromBackLog();
    public:
-      CommunicationJumpropes(OpenALRF::ICommandQueue *Queue);
+      CommunicationJumpropes();
 
       void Process() override;
 
       void SendToStation(const std::string AMessage) override;
-
-      OpenALRF::ICommandQueue *GetCmdQueue();
 
       // Inherited via ICommunication
       virtual std::string GetStatusInfo() override;

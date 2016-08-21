@@ -9,8 +9,6 @@ namespace AudacityRover
    class WatchCat
    {
    protected:
-      OpenALRF::ICommandQueue *Queue;
-      OpenALRF::ISystem *System;
       int64_t TickCount;
       int64_t ActCount;
       int64_t CheckCount;
@@ -21,7 +19,7 @@ namespace AudacityRover
       void CheckAndAct();
 
    public:
-      WatchCat(OpenALRF::ISystem *ASystem, OpenALRF::ICommandQueue *AQueue);
+      WatchCat();
 
       void ForceAction();
 
