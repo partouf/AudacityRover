@@ -95,7 +95,7 @@ OpenALRF::degrees_t MakeCommandsFromMapSearchDifference(const OpenALRF::MapSearc
 
       if (NewAngle > 180)
       {
-         Queue->Add({ OpenALRF::modRemotePilot, OpenALRF::actRemotePilotLeft, 180 - NewAngle });
+         Queue->Add({ OpenALRF::modRemotePilot, OpenALRF::actRemotePilotLeft, static_cast<int16_t>(180 - NewAngle) });
       }
       else if (NewAngle > 0)
       {
