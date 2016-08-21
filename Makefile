@@ -5,7 +5,7 @@ OBJ_COMMAND = Command/CommandQueueDefault.o
 OBJ_PILOT = Pilot/RemotePilotGoPiGo.o
 OBJ_CAMERA = Camera/CameraRaspi.o
 OBJ_SENSORS = 
-OBJ_SYSTEM = System/WatchCat.o System/SystemAudacity.o System/Logging.o System/Modules.o
+OBJ_SYSTEM = System/WatchCat.o System/SystemAudacity.o System/Logging.o System/Modules.o System/Configuration.o
 OBJ_MAIN = main.o
 
 OBJ = $(OBJ_COMMUNICATION) $(OBJ_COMMAND) $(OBJ_PILOT) $(OBJ_CAMERA) $(SENSORS) $(OBJ_SYSTEM) $(OBJ_MAIN)
@@ -43,6 +43,9 @@ System/SystemAudacity.o: System/SystemAudacity.cpp
 
 System/Modules.o: System/Modules.cpp
 	$(CXX) -c System/Modules.cpp -o System/Modules.o $(CXXFLAGS)
+
+System/Configuration.o: System/Configuration.cpp
+	$(CXX) -c System/Configuration.cpp -o System/Configuration.o $(CXXFLAGS)
 
 System/Logging.o: System/Logging.cpp
 	$(CXX) -c System/Logging.cpp -o System/Logging.o $(CXXFLAGS)
