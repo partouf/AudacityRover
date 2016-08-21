@@ -15,7 +15,7 @@
 
 #include <OpenALRF/World/Map.h>
 #include <OpenALRF/World/AStarMapNode.h>
-#include "main.h"
+
 
 OpenALRF::degrees_t CurrentAngle = 0;
 
