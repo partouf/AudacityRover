@@ -176,16 +176,22 @@ int main()
          try
          {
             auto Modules = AudacityRover::Modules::Instance();
+            Modules->System->ChangeStatus(OpenALRF::statRunning);
             while (!Modules->System->ShouldQuit())
             {
                Modules->Comm->Process();
                Modules->CommandQueue->Process();
-               Modules->Cat->Process();
 
-               if (!MapDone)
+               if (Modules->System->CurrentStatus() == OpenALRF::statRunning)
                {
-                  findSolutionForMap("maptest.txt", "mapout.txt");
-                  MapDone = true;
+                  Modules->SensorSweep();
+                  Modules->Cat->Process();
+
+                  if (!MapDone)
+                  {
+                     findSolutionForMap("maptest.txt", "mapout.txt");
+                     MapDone = true;
+                  }
                }
 
                GFMillisleep(100);

@@ -1,16 +1,12 @@
 #include "RemotePilotGoPiGo.h"
 
-#ifdef USENULLBOARD
-#include <GoPiGo/OS/null.h>
-#else
-#include <GoPiGo/OS/linux.h>
-#endif
-
 #include <OpenALRF/Common/Timing.h>
 
 #include <iostream>
 #include <Groundfloor/Bookshelfs/BValue.h>
 #include <chrono>
+
+#include "../System/Modules.h"
 
 using namespace std::chrono;
 
@@ -27,28 +23,14 @@ constexpr auto M_PI = 3.14159265358979323846;
 
 void AudacityRover::RemotePilotGoPiGo::ReconnectIfNeeded()
 {
-   if (!MainBoard->IsConnected())
+   if (!Modules::Instance()->GoPiGoMainBoard->IsConnected())
    {
-      MainBoard->Connect();
+      Modules::Instance()->GoPiGoMainBoard->Connect();
    }
 }
 
 AudacityRover::RemotePilotGoPiGo::RemotePilotGoPiGo() : OpenALRF::IRemotePilot()
 {
-#ifdef USENULLBOARD
-   MainBoard = new GoPiGo::NullBoard(1);
-#else
-   MainBoard = new GoPiGo::LinuxBoard(1);
-#endif
-   
-   if (!MainBoard->Connect())
-   {
-      throw MainBoard->LastKnownError;
-   }
-
-   Wheels = new GoPiGo::Wheels(MainBoard);
-   Encoders = new GoPiGo::WheelEncodersWithErrorDetection(MainBoard);
-
    LatestMeasuredSpeed1 = 0;
    LatestMeasuredSpeed2 = 0;
    AccumulatedDistanceTraveled1 = 0;
@@ -57,13 +39,14 @@ AudacityRover::RemotePilotGoPiGo::RemotePilotGoPiGo() : OpenALRF::IRemotePilot()
 
 AudacityRover::RemotePilotGoPiGo::~RemotePilotGoPiGo()
 {
-   delete Wheels;
-   delete MainBoard;
 }
 
 void AudacityRover::RemotePilotGoPiGo::Forward(OpenALRF::distance_t ADistance)
 {
    ReconnectIfNeeded();
+
+   auto Wheels = Modules::Instance()->Wheels;
+   auto Encoders = Modules::Instance()->Encoders;
 
    Wheels->SetSpeedBothMotors(255);
 
@@ -81,6 +64,9 @@ void AudacityRover::RemotePilotGoPiGo::MovementCheckLoop()
 {
    GoPiGo::encoderpulses_t D1 = -1, D2 = -1;
    int LoopDuplicates = 0;
+
+   auto Wheels = Modules::Instance()->Wheels;
+   auto Encoders = Modules::Instance()->Encoders;
 
    auto T0 = steady_clock::now();
 
@@ -112,7 +98,7 @@ void AudacityRover::RemotePilotGoPiGo::MovementCheckLoop()
          LoopDuplicates = 0;
       }
 
-      MainBoard->Sleep(70);
+      Modules::Instance()->GoPiGoMainBoard->Sleep(70);
    }
 
 
@@ -136,6 +122,9 @@ void AudacityRover::RemotePilotGoPiGo::MovementCheckLoop()
 void AudacityRover::RemotePilotGoPiGo::Backward(OpenALRF::distance_t ADistance)
 {
    ReconnectIfNeeded();
+
+   auto Wheels = Modules::Instance()->Wheels;
+   auto Encoders = Modules::Instance()->Encoders;
 
    Wheels->SetSpeedBothMotors(255);
 
@@ -165,8 +154,11 @@ void AudacityRover::RemotePilotGoPiGo::Left(OpenALRF::degrees_t AAngle)
 
    this->ReconnectIfNeeded();
 
-   this->Wheels->SetSpeedMotor1(0);
-   this->Wheels->SetSpeedMotor2(255);
+   auto Wheels = Modules::Instance()->Wheels;
+   auto Encoders = Modules::Instance()->Encoders;
+
+   Wheels->SetSpeedMotor1(0);
+   Wheels->SetSpeedMotor2(255);
 
    // so given the situation, the vehicle's right tire will travel along the edge of a small circle, which can trace back to an angle
    //  so, we know that if 1 rotation of the wheel is 19cm in travel
@@ -189,8 +181,11 @@ void AudacityRover::RemotePilotGoPiGo::Right(OpenALRF::degrees_t AAngle)
 {
    this->ReconnectIfNeeded();
 
-   this->Wheels->SetSpeedMotor1(255);
-   this->Wheels->SetSpeedMotor2(0);
+   auto Wheels = Modules::Instance()->Wheels;
+   auto Encoders = Modules::Instance()->Encoders;
+
+   Wheels->SetSpeedMotor1(255);
+   Wheels->SetSpeedMotor2(0);
 
    double calc = ((23.0 * M_PI) / 360.0) * AAngle;
    OpenALRF::distance_t distance = (OpenALRF::distance_t)calc;
@@ -208,6 +203,8 @@ void AudacityRover::RemotePilotGoPiGo::Stop()
 {
    ReconnectIfNeeded();
 
+   auto Wheels = Modules::Instance()->Wheels;
+
    Wheels->Stop();
 }
 
@@ -217,17 +214,17 @@ std::string AudacityRover::RemotePilotGoPiGo::GetStatusInfo()
 
    Groundfloor::BValue Val;
 
-   Val.setInteger(MainBoard->GetCpuSpeed());
+   Val.setInteger(Modules::Instance()->GoPiGoMainBoard->GetCpuSpeed());
    Data += "<cpuspeed>";
    Data += Val.asString()->getValue();
    Data += "</cpuspeed>";
 
-   Val.setInteger(MainBoard->GetBoardVersion());
+   Val.setInteger(Modules::Instance()->GoPiGoMainBoard->GetBoardVersion());
    Data += "<boardversion>";
    Data += Val.asString()->getValue();
    Data += "</boardversion>";
 
-   Val.setDouble(MainBoard->GetVoltage());
+   Val.setDouble(Modules::Instance()->GoPiGoMainBoard->GetVoltage());
    Data += "<voltage>";
    Data += Val.asString()->getValue();
    Data += "</voltage>";

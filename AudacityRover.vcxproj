@@ -99,11 +99,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);USENULLBOARD</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Patrick\Documents\GitHub\AudacityRover\lib\Crosscables\include;C:\Users\Patrick\Documents\GitHub\AudacityRover\lib;C:\Users\Patrick\Documents\GitHub\AudacityRover\lib\raspicam\src;C:\Users\Patrick\Documents\GitHub\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Patrick\Documents\GitHub\AudacityRover\lib\Crosscables\include;C:\Users\Patrick\Documents\GitHub\AudacityRover\lib;C:\Users\Patrick\Documents\GitHub\AudacityRover\lib\raspicam\src;C:\Users\Patrick\Documents\GitHub\opencv\build\include;C:\Users\Patrick\Documents\GitHub\AudacityRover\lib\cpp-sense-hat\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OpenALRF.lib;GoPiGo.lib;libJumpropes.lib;libGroundfloor.lib;ws2_32.lib;raspicam.lib;opencv_world310d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(TargetDir);$(SolutionDir)lib\Crosscables\$(PlatformTarget)\$(ConfigurationName);$(SolutionDir)..\opencv\build\$(PlatformTarget)\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenALRF.lib;GoPiGo.lib;libJumpropes.lib;libGroundfloor.lib;ws2_32.lib;raspicam.lib;opencv_world310d.lib;sense-hat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);$(SolutionDir)lib\Crosscables\$(PlatformTarget)\$(ConfigurationName);$(SolutionDir)..\opencv\build\$(PlatformTarget)\vc14\lib;$(SolutionDir)lib\sense-hat\$(PlatformTarget)\$(ConfigurationName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -148,6 +148,11 @@
     <ClCompile Include="Communication\SensorDataTransmitter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pilot\RemotePilotGoPiGo.cpp" />
+    <ClCompile Include="Sensors\AccelerometerSenseHAT.cpp" />
+    <ClCompile Include="Sensors\DummySensor.cpp" />
+    <ClCompile Include="Sensors\GyroscopeSenseHAT.cpp" />
+    <ClCompile Include="Sensors\MagnometerSenseHAT.cpp" />
+    <ClCompile Include="Sensors\SenseHATSensor.cpp" />
     <ClCompile Include="Sensors\TemperatureSenseHAT.cpp" />
     <ClCompile Include="System\Configuration.cpp" />
     <ClCompile Include="System\Logging.cpp" />
@@ -163,7 +168,12 @@
     <ClInclude Include="Communication\SensorDataTransmitter.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Pilot\RemotePilotGoPiGo.h" />
+    <ClInclude Include="Sensors\AccelerometerSenseHAT.h" />
+    <ClInclude Include="Sensors\GyroscopeSenseHAT.h" />
+    <ClInclude Include="Sensors\MagnometerSenseHAT.h" />
+    <ClInclude Include="Sensors\SenseHATSensor.h" />
     <ClInclude Include="Sensors\TemperatureSenseHAT.h" />
+    <ClInclude Include="Sensors\DummySensor.h" />
     <ClInclude Include="System\Configuration.h" />
     <ClInclude Include="System\Logging.h" />
     <ClInclude Include="System\Modules.h" />

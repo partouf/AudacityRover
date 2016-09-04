@@ -9,10 +9,6 @@ namespace AudacityRover
    class RemotePilotGoPiGo : public OpenALRF::IRemotePilot
    {
    private:
-      GoPiGo::IBoard *MainBoard;
-      GoPiGo::Wheels *Wheels;
-      GoPiGo::WheelEncodersWithErrorDetection *Encoders;
-
       int64_t AccumulatedDistanceTraveled1;
       int64_t AccumulatedDistanceTraveled2;
 

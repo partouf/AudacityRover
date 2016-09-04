@@ -88,7 +88,17 @@ void AudacityRover::Connection::newMessageReceived(const String * sMessage)
       Groundfloor::split_p(&SplitURL, &url, "/", 5);
       Groundfloor::BValue Val;
 
-      if (SplitURL.size() >= 2)
+      if (sMessage->startsWith_ansi("GET /status"))
+      {
+         std::string Content;
+         Content += "<?xml version=\"1.0\"?>\n";
+         Content += "<status>";
+         Content += Modules::Instance()->GetStatusInfo();
+         Content += "</status>";
+
+         ReplyHTTPOKWithContent("text/xml", Content);
+      }
+      else if (SplitURL.size() >= 2)
       {
          Val.setString(static_cast<Groundfloor::String *>(SplitURL.elementAt(0)));
 
@@ -248,6 +258,20 @@ void AudacityRover::Connection::ReplyBinaryFail()
 void AudacityRover::Connection::ReplyHTTPOK()
 {
    Groundfloor::String Understood("HTTP/1.1 200 OK\n\nOK\n");
+   this->socket->send(&Understood);
+   this->socket->disconnect();
+}
+
+void AudacityRover::Connection::ReplyHTTPOKWithContent(std::string AContentType, std::string AContent)
+{
+   Groundfloor::String Understood("HTTP/1.1 200 OK\n");
+   Understood.append_ansi("Content-Type: ");
+   Understood.append_ansi(AContentType.c_str());
+   Understood.append_ansi("\n\n");
+
+   Groundfloor::String Data(AContent);
+   Understood.append(&Data);
+
    this->socket->send(&Understood);
    this->socket->disconnect();
 }

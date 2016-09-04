@@ -1,6 +1,7 @@
 #include "CommandQueueDefault.h"
 
 #include "../System/Modules.h"
+#include <Groundfloor/Bookshelfs/BValue.h>
 
 void AudacityRover::CommandQueue::Init()
 {
@@ -118,21 +119,11 @@ std::string AudacityRover::CommandQueue::GetStatusInfo()
 {
    std::string Data;
 
-   Data += "<system>";
-   Data += Modules::Instance()->System->GetStatusInfo();
-   Data += "</system>";
-
-   Data += "<camera>";
-   Data += Modules::Instance()->MainCamera->GetStatusInfo();
-   Data += "</camera>";
-
-   Data += "<remotepilot>";
-   Data += Modules::Instance()->Pilot->GetStatusInfo();
-   Data += "</remotepilot>";
-
-   Data += "<sensorbus>";
-   Data += Modules::Instance()->SensorBus->GetStatusInfo();
-   Data += "</sensorbus>";
+   Data += "<queuesize>";
+   Groundfloor::BValue Val;
+   Val.setInteger(Queue.size());
+   Data += Val.asString()->getValue();
+   Data += "</queuesize>";
 
    return Data;
 }

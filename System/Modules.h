@@ -1,5 +1,9 @@
 #pragma once
 
+#include <GoPiGo/Common/board.h>
+#include <GoPiGo/Devices/encoders.h>
+#include <GoPiGo/Devices/wheels.h>
+
 #include <OpenALRF/Pilot/RemotePilot.h>
 #include <OpenALRF/Pilot/AutoPilot.h>
 #include <OpenALRF/Camera/MainCamera.h>
@@ -13,11 +17,19 @@ namespace AudacityRover
 {
    class Modules
    {
+   protected:
+      std::vector<OpenALRF::ISensor *> Sensors;
+
+      std::string GetModuleInfoXML(std::string AModuleName, OpenALRF::IModule *AModule);
    public:
       Modules();
       ~Modules();
 
       static Modules *Instance();
+
+      GoPiGo::IBoard *GoPiGoMainBoard;
+      GoPiGo::Wheels *Wheels;
+      GoPiGo::WheelEncodersWithErrorDetection *Encoders;
 
       OpenALRF::IRemotePilot *Pilot;
       OpenALRF::IAutoPilot *Auto;
@@ -39,7 +51,11 @@ namespace AudacityRover
       OpenALRF::ISensor *Barometer1;
       OpenALRF::ISensor *Humidity1;
 
-      OpenALRF::ISensor *WheelEncoderLeft;
-      OpenALRF::ISensor *WheelEncoderRight;
+      OpenALRF::ISensor *Dummy1;
+      OpenALRF::ISensor *Dummy2;
+
+      std::string GetStatusInfo();
+
+      void SensorSweep();
    };
 };

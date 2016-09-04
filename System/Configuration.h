@@ -19,8 +19,9 @@ namespace AudacityRover
       OpenALRF::SensorConfig Temperature1;
       OpenALRF::SensorConfig Barometer1;
       OpenALRF::SensorConfig Humidity1;
-      OpenALRF::SensorConfig WheelEncoderLeft;
-      OpenALRF::SensorConfig WheelEncoderRight;
+
+      OpenALRF::SensorConfig Dummy1;
+      OpenALRF::SensorConfig Dummy2;
 
       std::string CameraFrontLeft;
       std::string CameraFrontRight;

@@ -29,6 +29,7 @@ namespace AudacityRover
       void ReplyBinaryOK();
       void ReplyBinaryFail();
       void ReplyHTTPOK();
+      void ReplyHTTPOKWithContent(std::string AContentType, std::string AContent);
       void ReplyHTTPFail();
       void ReplyWithFile(const String *AFile);
       Groundfloor::String GetHTTPHeaderForFile(const Groundfloor::String * AFile);

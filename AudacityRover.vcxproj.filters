@@ -90,6 +90,21 @@
     <ClInclude Include="System\Modules.h">
       <Filter>Header Files\System</Filter>
     </ClInclude>
+    <ClInclude Include="Sensors\MagnometerSenseHAT.h">
+      <Filter>Header Files\Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="Sensors\SenseHATSensor.h">
+      <Filter>Header Files\Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="Sensors\AccelerometerSenseHAT.h">
+      <Filter>Header Files\Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="Sensors\GyroscopeSenseHAT.h">
+      <Filter>Header Files\Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="Sensors\DummySensor.h">
+      <Filter>Header Files\Sensors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Pilot\RemotePilotGoPiGo.cpp">
@@ -128,8 +143,23 @@
     <ClCompile Include="System\Configuration.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
+    <ClCompile Include="Sensors\MagnometerSenseHAT.cpp">
+      <Filter>Source Files\Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="Sensors\SenseHATSensor.cpp">
+      <Filter>Source Files\Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="Sensors\AccelerometerSenseHAT.cpp">
+      <Filter>Source Files\Sensors</Filter>
+    </ClCompile>
     <ClCompile Include="System\Modules.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Sensors\GyroscopeSenseHAT.cpp">
+      <Filter>Source Files\Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="Sensors\DummySensor.cpp">
+      <Filter>Source Files\Sensors</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
