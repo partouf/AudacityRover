@@ -4,5 +4,5 @@ cd lib/Crosscables/libGroundfloor && sh build.sh
 cd ../libJumpropes && sh build.sh
 cd ../../GoPiGo && make
 cd ../OpenALRF && make
-cd ../raspicam && mkdir build && cmake .. && make
+cd ../raspicam && mkdir build && cd build && cmake .. && make
 cd ../../.. && make
