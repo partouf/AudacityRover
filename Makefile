@@ -4,7 +4,7 @@ OBJ_COMMUNICATION = Communication/CommunicationJumpropes.o Communication/SensorD
 OBJ_COMMAND = Command/CommandQueueDefault.o
 OBJ_PILOT = Pilot/RemotePilotGoPiGo.o
 OBJ_CAMERA = Camera/CameraRaspi.o
-OBJ_SENSORS = 
+OBJ_SENSORS = Sensors/DummySensor.o Sensors/SenseHATSensor.o Sensors/AccelerometerSenseHAT.o Sensors/MagnometerSenseHAT.o Sensors/GyroscopeSenseHAT.o Sensors/TemperatureSenseHAT.o
 OBJ_SYSTEM = System/WatchCat.o System/SystemAudacity.o System/Logging.o System/Modules.o System/Configuration.o
 OBJ_MAIN = main.o
 
@@ -46,6 +46,24 @@ System/Modules.o: System/Modules.cpp
 
 System/Configuration.o: System/Configuration.cpp
 	$(CXX) -c System/Configuration.cpp -o System/Configuration.o $(CXXFLAGS)
+
+Sensors/DummySensor.o: Sensors/DummySensor.cpp
+	$(CXX) -c Sensors/DummySensor.cpp -o Sensors/DummySensor.o $(CXXFLAGS)
+
+Sensors/AccelerometerSenseHAT.o: Sensors/AccelerometerSenseHAT.cpp
+	$(CXX) -c Sensors/AccelerometerSenseHAT.cpp -o Sensors/AccelerometerSenseHAT.o $(CXXFLAGS)
+
+Sensors/SenseHATSensor.o: Sensors/SenseHATSensor.cpp
+	$(CXX) -c Sensors/SenseHATSensor.cpp -o Sensors/SenseHATSensor.o $(CXXFLAGS)
+
+Sensors/MagnometerSenseHAT.o: Sensors/MagnometerSenseHAT.cpp
+	$(CXX) -c Sensors/MagnometerSenseHAT.cpp -o Sensors/MagnometerSenseHAT.o $(CXXFLAGS)
+
+Sensors/TemperatureSenseHAT.o: Sensors/TemperatureSenseHAT.cpp
+	$(CXX) -c Sensors/TemperatureSenseHAT.cpp -o Sensors/TemperatureSenseHAT.o $(CXXFLAGS)
+
+Sensors/GyroscopeSenseHAT.o: Sensors/GyroscopeSenseHAT.cpp
+	$(CXX) -c Sensors/GyroscopeSenseHAT.cpp -o Sensors/GyroscopeSenseHAT.o $(CXXFLAGS)
 
 System/Logging.o: System/Logging.cpp
 	$(CXX) -c System/Logging.cpp -o System/Logging.o $(CXXFLAGS)
