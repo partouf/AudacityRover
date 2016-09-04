@@ -10,9 +10,9 @@ OBJ_MAIN = main.o
 
 OBJ = $(OBJ_COMMUNICATION) $(OBJ_COMMAND) $(OBJ_PILOT) $(OBJ_CAMERA) $(SENSORS) $(OBJ_SYSTEM) $(OBJ_MAIN)
 LINKOBJ = $(OBJ)
-LIBS = -L"./lib/GoPiGo" -L"./lib/Crosscables/libGroundfloor" -L"./lib/Crosscables/libJumpropes" -L"./lib/OpenALRF" -L"./lib/raspicam/build" -lGoPiGo -lOpenALRF -lJumpropes -lGroundfloor -lraspicam -lpthread -lrt
+LIBS = -L"./lib/GoPiGo" -L"./lib/Crosscables/libGroundfloor" -L"./lib/Crosscables/libJumpropes" -L"./lib/OpenALRF" -L"./lib/raspicam/build" -I"./lib/cpp-sense-hat/lib" -lGoPiGo -lOpenALRF -lJumpropes -lGroundfloor -lraspicam -l sense-hat -lpthread -lrt
 BIN  = AudacityRover
-CXXINCS = -I"./lib" -I"./lib/Crosscables/include"
+CXXINCS = -I"./lib" -I"./lib/Crosscables/include" -I"./lib/cpp-sense-hat/src"
 CXXFLAGS = $(CXXINCS) -fexceptions -std=c++11 -O2
 RM = rm -f
 
