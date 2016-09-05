@@ -1,6 +1,7 @@
 #include "TemperatureSenseHAT.h"
 
 #include <OpenALRF/Common/Timing.h>
+#include <cmath>
 
 AudacityRover::TemperatureSenseHAT::TemperatureSenseHAT(OpenALRF::sensorid_t AIdentifier) : AudacityRover::SenseHATSensor(AIdentifier)
 {
@@ -13,7 +14,7 @@ bool AudacityRover::TemperatureSenseHAT::NextValue(OpenALRF::Sensor3DData &AValu
    if (IsPowered())
    {
       auto data = HAT->get_temperature();
-      if (!isnan(data))
+      if (!std::isnan(data))
       {
          AValue.Timestamp = OpenALRF::GetCurrentTimestamp();
          AValue.Data1 = data;
