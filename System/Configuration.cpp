@@ -17,6 +17,8 @@ AudacityRover::Configuration::Configuration()
    CommandServerPort = 13666;
    SensorServerPort = 13777;
 
+   GoPiGo               = pi2hostname;
+
    Accelerometer1       = { 11, pi1hostname };
    Gyroscope1           = { 12, pi1hostname };
    Magnometer1          = { 13, pi1hostname };
@@ -28,8 +30,8 @@ AudacityRover::Configuration::Configuration()
    Dummy1               = { 21, pi1hostname };
    Dummy2               = { 22, pi2hostname };
 
-   CameraFrontLeft = pi2hostname;
-   CameraFrontRight = pi1hostname;
+   CameraFrontLeft      = pi2hostname;
+   CameraFrontRight     = pi1hostname;
 }
 
 AudacityRover::Configuration * AudacityRover::Configuration::Instance()

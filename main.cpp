@@ -200,7 +200,7 @@ int main()
          }
          catch (std::exception &e)
          {
-            std::cout << e.what() << std::endl;
+            std::cout << "An exception was thrown: " << e.what() << std::endl;
          }
 
          std::cout << "Goodbye!" << std::endl;

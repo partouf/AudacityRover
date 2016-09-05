@@ -48,23 +48,7 @@ std::string AudacityRover::Modules::GetModuleInfoXML(std::string AModuleName, Op
 
 AudacityRover::Modules::Modules()
 {
-#ifdef USENULLBOARD
-   GoPiGoMainBoard = new GoPiGo::NullBoard(1);
-#else
-   GoPiGoMainBoard = new GoPiGo::LinuxBoard(1);
-#endif
-
-   if (!GoPiGoMainBoard->Connect())
-   {
-      throw GoPiGoMainBoard->LastKnownError;
-   }
-
-   Wheels = new GoPiGo::Wheels(GoPiGoMainBoard);
-   Encoders = new GoPiGo::WheelEncodersWithErrorDetection(GoPiGoMainBoard);
-
    System = new AudacityRover::SystemAudacity();
-   Pilot = new AudacityRover::RemotePilotGoPiGo();
-   Auto = nullptr;// new AutoPilotDefault();
    MainCamera = new AudacityRover::CameraRaspi();
    SensorBus = new OpenALRF::SensorBus();
    CommandQueue = new AudacityRover::CommandQueue();
@@ -75,10 +59,30 @@ AudacityRover::Modules::Modules()
    Groundfloor::String Computername;
    if (!Jumpropes::TryToGetComputerName(&Computername))
    {
-      throw "unable to get computername, can't start without it";
+      throw new std::exception("unable to get computername, can't start without it");
    }
 
    auto Configuration = Configuration::Instance();
+
+   if (Computername.match(Configuration->GoPiGo))
+   {
+      #ifdef USENULLBOARD
+      GoPiGoMainBoard = new GoPiGo::NullBoard(1);
+      #else
+      GoPiGoMainBoard = new GoPiGo::LinuxBoard(1);
+      #endif
+
+      if (!GoPiGoMainBoard->Connect())
+      {
+         throw new std::exception(GoPiGoMainBoard->LastKnownError.c_str());
+      }
+
+      Wheels = new GoPiGo::Wheels(GoPiGoMainBoard);
+      Encoders = new GoPiGo::WheelEncodersWithErrorDetection(GoPiGoMainBoard);
+
+      Pilot = new AudacityRover::RemotePilotGoPiGo();
+      Auto = nullptr;// new AutoPilotDefault();
+   }
 
    if (Computername.match(Configuration->Accelerometer1.IPAddress))
    {

@@ -61,26 +61,30 @@ void AudacityRover::CommandQueue::DoCommand(OpenALRF::Command ACmd)
    }
    else if (ACmd.Module == OpenALRF::modRemotePilot)
    {
-      if (ACmd.Action == OpenALRF::actRemotePilotForward)
+      if (Pilot != nullptr)
       {
-         Pilot->Forward(static_cast<OpenALRF::distance_t>(ACmd.param1));
+         if (ACmd.Action == OpenALRF::actRemotePilotForward)
+         {
+            Pilot->Forward(static_cast<OpenALRF::distance_t>(ACmd.param1));
+         }
+         else if (ACmd.Action == OpenALRF::actRemotePilotBackward)
+         {
+            Pilot->Backward(static_cast<OpenALRF::distance_t>(ACmd.param1));
+         }
+         else if (ACmd.Action == OpenALRF::actRemotePilotLeft)
+         {
+            Pilot->Left(static_cast<OpenALRF::distance_t>(ACmd.param1));
+         }
+         else if (ACmd.Action == OpenALRF::actRemotePilotRight)
+         {
+            Pilot->Right(static_cast<OpenALRF::distance_t>(ACmd.param1));
+         }
+         else if (ACmd.Action == OpenALRF::actRemotePilotStop)
+         {
+            Pilot->Stop();
+         }
       }
-      else if (ACmd.Action == OpenALRF::actRemotePilotBackward)
-      {
-         Pilot->Backward(static_cast<OpenALRF::distance_t>(ACmd.param1));
-      }
-      else if (ACmd.Action == OpenALRF::actRemotePilotLeft)
-      {
-         Pilot->Left(static_cast<OpenALRF::distance_t>(ACmd.param1));
-      }
-      else if (ACmd.Action == OpenALRF::actRemotePilotRight)
-      {
-         Pilot->Right(static_cast<OpenALRF::distance_t>(ACmd.param1));
-      }
-      else if (ACmd.Action == OpenALRF::actRemotePilotStop)
-      {
-         Pilot->Stop();
-      }
+      // todo: else -> relay to other PI
    }
 }
 
