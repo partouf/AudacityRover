@@ -15,6 +15,7 @@
 #include "../Sensors/TemperatureSenseHAT.h"
 #include "../Sensors/GyroscopeSenseHAT.h"
 #include "../Sensors/DummySensor.h"
+#include <stdexcept>
 
 #ifdef USENULLBOARD
 #include <GoPiGo/OS/null.h>
