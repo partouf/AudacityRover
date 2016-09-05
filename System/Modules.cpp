@@ -59,7 +59,7 @@ AudacityRover::Modules::Modules()
    Groundfloor::String Computername;
    if (!Jumpropes::TryToGetComputerName(&Computername))
    {
-      throw new std::exception("unable to get computername, can't start without it");
+      throw new std::runtime_error("unable to get computername, can't start without it");
    }
 
    auto Configuration = Configuration::Instance();
@@ -74,7 +74,7 @@ AudacityRover::Modules::Modules()
 
       if (!GoPiGoMainBoard->Connect())
       {
-         throw new std::exception(GoPiGoMainBoard->LastKnownError.c_str());
+         throw new std::runtime_error(GoPiGoMainBoard->LastKnownError.c_str());
       }
 
       Wheels = new GoPiGo::Wheels(GoPiGoMainBoard);
