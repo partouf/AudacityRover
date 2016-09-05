@@ -2,12 +2,12 @@
 
 #include <Groundfloor/Atoms/Defines.h>
 
-#define pi1hostname "pi1wifi"
+#define pi1hostname "pi1"
 
 #ifdef GF_OS_WIN32
 #define pi2hostname "testpc"
 #else
-#define pi2hostname "pi2wifi"
+#define pi2hostname "pi2"
 #endif
 
 AudacityRover::Configuration DefaultInstance;
