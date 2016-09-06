@@ -189,7 +189,7 @@ int main()
 
                   if (!MapDone)
                   {
-                     findSolutionForMap("maptest.txt", "mapout.txt");
+                     //findSolutionForMap("maptest.txt", "mapout.txt");
                      MapDone = true;
                   }
                }
@@ -197,6 +197,10 @@ int main()
                GFMillisleep(100);
             }
 
+            if (Modules->System->ShouldQuit())
+            {
+               std::cout << "Someone made me Quit" << std::endl;
+            }
          }
          catch (std::exception &e)
          {

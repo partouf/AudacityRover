@@ -35,5 +35,6 @@ namespace AudacityRover
       bool Connect();
       void Disconnect();
 
+      bool IsConnected();
    };
 };

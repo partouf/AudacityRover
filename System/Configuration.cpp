@@ -18,6 +18,7 @@ AudacityRover::Configuration::Configuration()
    SensorServerPort = 13777;
 
    GoPiGo               = pi2hostname;
+   RTIMU                = pi1hostname;
 
    Accelerometer1       = { 11, pi1hostname };
    Gyroscope1           = { 12, pi1hostname };

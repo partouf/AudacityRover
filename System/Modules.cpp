@@ -83,6 +83,18 @@ AudacityRover::Modules::Modules()
 
       Pilot = new AudacityRover::RemotePilotGoPiGo();
       Auto = nullptr;// new AutoPilotDefault();
+
+      SensorReceiver = new AudacityRover::SensorDataReceiver(Configuration->RTIMU);
+   }
+   else
+   {
+      GoPiGoMainBoard = nullptr;
+      Wheels = nullptr;
+      Encoders = nullptr;
+      Pilot = nullptr;
+      Auto = nullptr;
+
+      SensorReceiver = new AudacityRover::SensorDataReceiver(Configuration->GoPiGo);
    }
 
    if (Computername.match(Configuration->Accelerometer1.IPAddress))
@@ -131,7 +143,7 @@ AudacityRover::Modules::Modules()
    }
    else
    {
-      Barometer1 = new OpenALRF::ProxySensor(Configuration->Barometer1.ID);
+      //Barometer1 = new OpenALRF::ProxySensor(Configuration->Barometer1.ID);
    }
 
    if (Computername.match(Configuration->Humidity1.IPAddress))
@@ -140,7 +152,7 @@ AudacityRover::Modules::Modules()
    }
    else
    {
-      Humidity1 = new OpenALRF::ProxySensor(Configuration->Humidity1.ID);
+      //Humidity1 = new OpenALRF::ProxySensor(Configuration->Humidity1.ID);
    }
 
    if (Computername.match(Configuration->Dummy1.IPAddress))
@@ -171,8 +183,8 @@ AudacityRover::Modules::~Modules()
    delete Dummy1;
    delete Dummy2;
 
-   delete Humidity1;
-   delete Barometer1;
+   //delete Humidity1;
+   //delete Barometer1;
    delete Temperature1;
    delete Magnometer1;
    delete Gyroscope1;
@@ -180,9 +192,11 @@ AudacityRover::Modules::~Modules()
 
    delete Cat;
    delete CommandQueue;
-   //delete Auto;
+   delete Auto;
    delete Pilot;
    delete MainCamera;
+   delete SensorTransmitter;
+   delete SensorReceiver;
    delete SensorBus;
    delete System;
    delete GoPiGoMainBoard;
@@ -212,8 +226,8 @@ std::string AudacityRover::Modules::GetStatusInfo()
    info += GetModuleInfoXML("Gyroscope1", Gyroscope1);
    info += GetModuleInfoXML("Magnometer1", Magnometer1);
    info += GetModuleInfoXML("Temperature1", Temperature1);
-   info += GetModuleInfoXML("Barometer1", Barometer1);
-   info += GetModuleInfoXML("Humidity1", Humidity1);
+//   info += GetModuleInfoXML("Barometer1", Barometer1);
+//   info += GetModuleInfoXML("Humidity1", Humidity1);
    info += GetModuleInfoXML("Dummy1", Dummy1);
    info += GetModuleInfoXML("Dummy2", Dummy2);
 
@@ -222,6 +236,11 @@ std::string AudacityRover::Modules::GetStatusInfo()
 
 void AudacityRover::Modules::SensorSweep()
 {
+   if (!SensorReceiver->IsConnected())
+   {
+      SensorReceiver->Connect();
+   }
+
    for (auto sensor : Sensors) 
    {
       OpenALRF::Sensor3DData data;

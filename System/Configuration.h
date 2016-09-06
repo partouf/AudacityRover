@@ -14,6 +14,7 @@ namespace AudacityRover
       int16_t CommandServerPort;
 
       std::string GoPiGo;
+      std::string RTIMU;
 
       OpenALRF::SensorConfig Accelerometer1;
       OpenALRF::SensorConfig Gyroscope1;

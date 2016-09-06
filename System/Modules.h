@@ -10,6 +10,8 @@
 #include <OpenALRF/System/System.h>
 #include <OpenALRF/Communication/SensorBus.h>
 #include <OpenALRF/Communication/Communication.h>
+#include "../Communication/SensorDataReceiver.h"
+
 
 #include "../System/WatchCat.h"
 
@@ -43,13 +45,14 @@ namespace AudacityRover
 
       AudacityRover::WatchCat *Cat;
       OpenALRF::ISensor3DBusListener *SensorTransmitter;
+      AudacityRover::SensorDataReceiver *SensorReceiver;
 
       OpenALRF::ISensor *Accelerometer1;
       OpenALRF::ISensor *Gyroscope1;
       OpenALRF::ISensor *Magnometer1;
       OpenALRF::ISensor *Temperature1;
-      OpenALRF::ISensor *Barometer1;
-      OpenALRF::ISensor *Humidity1;
+      //OpenALRF::ISensor *Barometer1;
+      //OpenALRF::ISensor *Humidity1;
 
       OpenALRF::ISensor *Dummy1;
       OpenALRF::ISensor *Dummy2;

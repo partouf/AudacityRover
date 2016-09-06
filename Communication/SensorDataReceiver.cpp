@@ -44,6 +44,11 @@ void AudacityRover::SensorDataReceiver::Disconnect()
    }
 }
 
+bool AudacityRover::SensorDataReceiver::IsConnected()
+{
+   return ((Thread != nullptr) && Connection.isConnected());
+}
+
 AudacityRover::SensorDataConnection::SensorDataConnection(Jumpropes::BaseSocket * aSocket) : Jumpropes::ThreadedConnection(aSocket)
 {
 }
