@@ -57,7 +57,10 @@ Groundfloor::String AudacityRover::SensorDataServer::SensorDataToString(const Op
 
 AudacityRover::SensorDataServer::SensorDataServer() : Jumpropes::ThreadedServer()
 {
-   startListening(Configuration::Instance()->SensorServerPort);
+   if (!startListening(Configuration::Instance()->SensorServerPort))
+   {
+      throw std::runtime_error("Unable to startListening");
+   }
 }
 
 void AudacityRover::SensorDataServer::newClientConnection(Jumpropes::BaseSocket * aClient)

@@ -7,7 +7,7 @@
 
 AudacityRover::SensorDataReceiver::SensorDataReceiver(const string AIPAddress)
 {
-   if (AIPAddress.find('.'))
+   if (AIPAddress.find('.') != -1)
    {
       Address.setValue(AIPAddress);
    }
@@ -22,9 +22,16 @@ bool AudacityRover::SensorDataReceiver::Connect()
    Disconnect();
 
    Jumpropes::LookupObject Lookup;
-   Jumpropes::JRresolveIP(&Address, &Lookup);
+   if (Jumpropes::JRresolveIP(&Address, &Lookup))
+   {
+      Connection.getRemoteAddress()->setValue(Lookup.getAddress(0));
+   }
+   else
+   {
+      std::cout << "Cannot resolve " << Address.getValue() << std::endl;
+      return false;
+   }
 
-   Connection.getRemoteAddress()->setValue(Lookup.getAddress(0));
    Connection.remotePort.set(Configuration::Instance()->SensorServerPort);
 
    if (Connection.connect())
