@@ -7,7 +7,14 @@
 
 AudacityRover::SensorDataReceiver::SensorDataReceiver(const string AIPAddress)
 {
-   Address.setValue(AIPAddress);
+   if (AIPAddress.find('.'))
+   {
+      Address.setValue(AIPAddress);
+   }
+   else
+   {
+      Address.setValue(AIPAddress + ".local");
+   }
 }
 
 bool AudacityRover::SensorDataReceiver::Connect()
