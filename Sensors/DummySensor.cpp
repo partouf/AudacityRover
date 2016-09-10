@@ -19,7 +19,7 @@ void AudacityRover::DummySensor::PowerOn()
    Powered = true;
 }
 
-bool AudacityRover::DummySensor::IsPowered()
+bool AudacityRover::DummySensor::IsPowered() const
 {
    return Powered;
 }

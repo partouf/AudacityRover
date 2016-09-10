@@ -258,10 +258,13 @@ void AudacityRover::Modules::SensorSweep()
 
    for (auto sensor : Sensors) 
    {
-      OpenALRF::Sensor3DData data;
-      if (sensor->NextValue(data))
+      if (sensor->GetOrigin() == OpenALRF::sensoriLocal)
       {
-         SensorBus->Broadcast(sensor->GetIdentifier(), sensor->GetSensorType(), sensor->GetUsedUnit(), data);
+         OpenALRF::Sensor3DData data;
+         if (sensor->NextValue(data))
+         {
+            SensorBus->Broadcast(sensor->GetIdentifier(), sensor->GetSensorType(), sensor->GetUsedUnit(), data);
+         }
       }
    }
 }

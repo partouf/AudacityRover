@@ -32,7 +32,7 @@ void AudacityRover::SenseHATSensor::PowerOn()
 #endif
 }
 
-bool AudacityRover::SenseHATSensor::IsPowered()
+bool AudacityRover::SenseHATSensor::IsPowered() const
 {
    return (HAT != nullptr);
 }
