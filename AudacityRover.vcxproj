@@ -166,7 +166,6 @@
     <ClInclude Include="Communication\CommunicationJumpropes.h" />
     <ClInclude Include="Communication\SensorDataReceiver.h" />
     <ClInclude Include="Communication\SensorDataTransmitter.h" />
-    <ClInclude Include="main.h" />
     <ClInclude Include="Pilot\RemotePilotGoPiGo.h" />
     <ClInclude Include="Sensors\AccelerometerSenseHAT.h" />
     <ClInclude Include="Sensors\GyroscopeSenseHAT.h" />

@@ -9,6 +9,7 @@
 #include <fstream>
 
 #include "../System/Modules.h"
+#include "../System/Logging.h"
 
 AudacityRover::CommunicationJumpropes::CommunicationJumpropes() : OpenALRF::ICommunication()
 {
@@ -27,6 +28,9 @@ void AudacityRover::CommunicationJumpropes::LoadFromBackLog()
 void AudacityRover::CommunicationJumpropes::Process()
 {
    // todo
+   LOGFUNCTION();
+
+   this->Server.Cleanup();
 }
 
 void AudacityRover::CommunicationJumpropes::SendToStation(const std::string AMessage)
@@ -50,6 +54,8 @@ void AudacityRover::CommunicationJumpropes::InitializeStationConnection(Jumprope
 {
    Client.remotePort.set(14666);
    Client.getRemoteAddress()->ip = this->Server.LastSender;
+
+   LOGFUNCTION();
 }
 
 std::string AudacityRover::CommunicationJumpropes::GetStatusInfo()
@@ -69,8 +75,34 @@ AudacityRover::Receiver::Receiver() : Jumpropes::ThreadedServer()
 {
 }
 
+void AudacityRover::Receiver::Cleanup()
+{
+   LOGCUSTOM(std::to_string(Clients.size()));
+
+   for (long i = 0; i < Clients.size(); ++i)
+   {
+      Connection *Conn = static_cast<Connection *>(Clients.elementAt(i));
+      if (Conn != nullptr)
+      {
+         if (!Conn->isRunning())
+         {
+            Clients.replaceElement(i, nullptr);
+            delete Conn;
+         }
+         else if (!Conn->IsConnected())
+         {
+            Conn->stop();
+         }
+      }
+   }
+
+   Clients.compress();
+}
+
 void AudacityRover::Connection::newMessageReceived(const String * sMessage)
 {
+   LOGFUNCTION();
+
    if (sMessage->startsWith_ansi("BINCMD") || sMessage->startsWith_ansi("BATCHCMD"))
    {
       // resets remaining buffer
@@ -257,14 +289,20 @@ void AudacityRover::Connection::ReplyBinaryFail()
 
 void AudacityRover::Connection::ReplyHTTPOK()
 {
-   Groundfloor::String Understood("HTTP/1.1 200 OK\n\nOK\n");
+   Groundfloor::String Understood("HTTP/1.1 200 OK\n");
+   Understood.append_ansi("Connection: close\n\n");
+   Understood.append_ansi("OK\n");
    this->socket->send(&Understood);
+   while (!this->socket->isReadyToSend()) {
+      GFMillisleep(1);
+   }
    this->socket->disconnect();
 }
 
 void AudacityRover::Connection::ReplyHTTPOKWithContent(std::string AContentType, std::string AContent)
 {
    Groundfloor::String Understood("HTTP/1.1 200 OK\n");
+   Understood.append_ansi("Connection: close\n");
    Understood.append_ansi("Content-Type: ");
    Understood.append_ansi(AContentType.c_str());
    Understood.append_ansi("\n\n");
@@ -273,13 +311,21 @@ void AudacityRover::Connection::ReplyHTTPOKWithContent(std::string AContentType,
    Understood.append(&Data);
 
    this->socket->send(&Understood);
+   while (!this->socket->isReadyToSend()) {
+      GFMillisleep(1);
+   }
    this->socket->disconnect();
 }
 
 void AudacityRover::Connection::ReplyHTTPFail()
 {
-   Groundfloor::String Error("HTTP/1.1 404 Error\n\nError\n");
+   Groundfloor::String Error("HTTP/1.1 404 Error\n");
+   Error.append_ansi("Connection: close\n\n");
+   Error.append_ansi("Error\n");
    this->socket->send(&Error);
+   while (!this->socket->isReadyToSend()) {
+      GFMillisleep(1);
+   }
    this->socket->disconnect();
 }
 
@@ -321,6 +367,7 @@ void AudacityRover::Connection::ReplyWithFile(const String * AFile)
 Groundfloor::String AudacityRover::Connection::GetHTTPHeaderForFile(const Groundfloor::String * AFile)
 {
    Groundfloor::String Data("HTTP/1.1 200 OK\n");
+   Data.append_ansi("Connection: close\n");
 
    Data.append_ansi("Content-Length: ");
 
@@ -353,5 +400,17 @@ AudacityRover::Connection::Connection(Jumpropes::BaseSocket * AClient, Receiver 
 {
    this->Server = AReceiver;
    this->start();
+
+   LOGFUNCTION();
+}
+
+bool AudacityRover::Connection::IsConnected() const
+{
+   if (this->socket != nullptr)
+   {
+      return this->socket->isConnected();
+   }
+
+   return false;
 }
 

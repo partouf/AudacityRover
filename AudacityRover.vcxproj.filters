@@ -66,9 +66,6 @@
     <ClInclude Include="System\SystemAudacity.h">
       <Filter>Header Files\System</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Communication\SensorDataTransmitter.h">
       <Filter>Header Files\Communication</Filter>
     </ClInclude>

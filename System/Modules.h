@@ -12,7 +12,7 @@
 #include <OpenALRF/Communication/Communication.h>
 #include "../Communication/SensorDataReceiver.h"
 
-
+#include "../System/Logging.h"
 #include "../System/WatchCat.h"
 
 namespace AudacityRover
@@ -28,6 +28,8 @@ namespace AudacityRover
       ~Modules();
 
       static Modules *Instance();
+
+      AudacityRover::ILogging *Logging;
 
       GoPiGo::IBoard *GoPiGoMainBoard;
       GoPiGo::Wheels *Wheels;

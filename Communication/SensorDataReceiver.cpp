@@ -3,6 +3,7 @@
 #include <OpenALRF/Communication/SensorBusTypes.h>
 #include <Jumpropes/Functions.h>
 #include "../System/Configuration.h"
+#include "../System/Modules.h"
 
 AudacityRover::SensorDataReceiver::SensorDataReceiver(const string AIPAddress)
 {
@@ -36,6 +37,7 @@ void AudacityRover::SensorDataReceiver::Disconnect()
 {
    if (Thread != nullptr)
    {
+      LOGFUNCTION();
       Thread->setSocket(nullptr);
 
       Connection.disconnect();
@@ -71,6 +73,8 @@ void AudacityRover::SensorDataConnection::newMessageReceived(const String * sMes
          memcpy(&SensorData.Data.Data1, Data + 12, 8);
          memcpy(&SensorData.Data.Data2, Data + 20, 8);
          memcpy(&SensorData.Data.Data3, Data + 28, 8);
+
+         Modules::Instance()->SensorBus->Broadcast(SensorData);
       }
    }
 }

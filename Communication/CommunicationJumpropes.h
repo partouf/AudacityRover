@@ -35,6 +35,8 @@ namespace AudacityRover
       Groundfloor::String GetHTTPHeaderForFile(const Groundfloor::String * AFile);
    public:
       Connection(Jumpropes::BaseSocket * AClient, Receiver *AReceiver);
+
+      bool IsConnected() const;
    };
 
    class Receiver : public Jumpropes::ThreadedServer
@@ -47,6 +49,8 @@ namespace AudacityRover
       Receiver();
 
       std::string LastSender;
+
+      void Cleanup();
    };
 
    class CommunicationJumpropes : public OpenALRF::ICommunication

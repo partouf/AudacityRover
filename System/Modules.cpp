@@ -49,12 +49,17 @@ std::string AudacityRover::Modules::GetModuleInfoXML(std::string AModuleName, Op
 
 AudacityRover::Modules::Modules()
 {
+   Logging = new AudacityRover::Logging();
+
    System = new AudacityRover::SystemAudacity();
    MainCamera = new AudacityRover::CameraRaspi();
    SensorBus = new OpenALRF::SensorBus();
    CommandQueue = new AudacityRover::CommandQueue();
    Comm = new AudacityRover::CommunicationJumpropes();
+
    SensorTransmitter = new AudacityRover::SensorDataTransmitter();
+   SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(SensorTransmitter));
+      
    Cat = new AudacityRover::WatchCat();
 
    Groundfloor::String Computername;
@@ -104,6 +109,7 @@ AudacityRover::Modules::Modules()
    else
    {
       Accelerometer1 = new OpenALRF::ProxySensor(Configuration->Accelerometer1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Accelerometer1));
    }
    Sensors.push_back(Accelerometer1);
 
@@ -114,6 +120,7 @@ AudacityRover::Modules::Modules()
    else
    {
       Gyroscope1 = new OpenALRF::ProxySensor(Configuration->Gyroscope1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Gyroscope1));
    }
    Sensors.push_back(Gyroscope1);
 
@@ -124,6 +131,7 @@ AudacityRover::Modules::Modules()
    else
    {
       Magnometer1 = new OpenALRF::ProxySensor(Configuration->Magnometer1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Magnometer1));
    }
    Sensors.push_back(Magnometer1);
 
@@ -134,6 +142,7 @@ AudacityRover::Modules::Modules()
    else
    {
       Temperature1 = new OpenALRF::ProxySensor(Configuration->Temperature1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Temperature1));
    }
    Sensors.push_back(Temperature1);
 
@@ -162,6 +171,7 @@ AudacityRover::Modules::Modules()
    else
    {
       Dummy1 = new OpenALRF::ProxySensor(Configuration->Dummy1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Dummy1));
    }
    Sensors.push_back(Dummy1);
 
@@ -172,6 +182,7 @@ AudacityRover::Modules::Modules()
    else
    {
       Dummy2 = new OpenALRF::ProxySensor(Configuration->Dummy2.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Dummy2));
    }
    Sensors.push_back(Dummy2);
 }
@@ -200,6 +211,8 @@ AudacityRover::Modules::~Modules()
    delete SensorBus;
    delete System;
    delete GoPiGoMainBoard;
+
+   delete Logging;
 }
 
 AudacityRover::Modules * AudacityRover::Modules::Instance()
@@ -236,6 +249,8 @@ std::string AudacityRover::Modules::GetStatusInfo()
 
 void AudacityRover::Modules::SensorSweep()
 {
+   LOGFUNCTION();
+
    if (!SensorReceiver->IsConnected())
    {
       SensorReceiver->Connect();
