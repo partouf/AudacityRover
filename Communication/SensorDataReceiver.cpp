@@ -4,6 +4,7 @@
 #include <Jumpropes/Functions.h>
 #include "../System/Configuration.h"
 #include "../System/Modules.h"
+#include <iostream>
 
 AudacityRover::SensorDataReceiver::SensorDataReceiver(const string AIPAddress)
 {
@@ -71,6 +72,8 @@ AudacityRover::SensorDataConnection::SensorDataConnection(Jumpropes::BaseSocket 
 
 void AudacityRover::SensorDataConnection::newMessageReceived(const String * sMessage)
 {
+   LOGFUNCTION();
+
    if (sMessage->getLength() == 37)
    {
       char *Data = sMessage->getValue();

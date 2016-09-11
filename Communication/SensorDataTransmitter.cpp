@@ -2,6 +2,7 @@
 
 #include "../System/Configuration.h"
 #include <Groundfloor/Molecules/String.h>
+#include <stdexcept>
 
 void AudacityRover::SensorDataServer::CleanupDisconnectedClients()
 {

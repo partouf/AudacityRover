@@ -58,8 +58,8 @@ AudacityRover::Modules::Modules()
    Comm = new AudacityRover::CommunicationJumpropes();
 
    SensorTransmitter = new AudacityRover::SensorDataTransmitter();
-   SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(SensorTransmitter));
-      
+   SensorBus->Subscribe(SensorTransmitter);
+
    Cat = new AudacityRover::WatchCat();
 
    Groundfloor::String Computername;
@@ -189,6 +189,8 @@ AudacityRover::Modules::Modules()
 
 AudacityRover::Modules::~Modules()
 {
+   LOGCUSTOM("PANIC!");
+
    Sensors.clear();
 
    delete Dummy1;
@@ -253,13 +255,23 @@ void AudacityRover::Modules::SensorSweep()
 
    if (!SensorReceiver->IsConnected())
    {
+      LOGCUSTOM("Connecting?");
       SensorReceiver->Connect();
    }
+return;
+   std::cout << GetStatusInfo() << std::endl; 
 
    for (auto sensor : Sensors) 
    {
+      LOGCUSTOM("Sensing");
+      if (sensor == nullptr)
+      {
+         LOGCUSTOM("nullptr");
+      }
+
       if (sensor->GetOrigin() == OpenALRF::sensoriLocal)
       {
+         LOGCUSTOM("Local");
          OpenALRF::Sensor3DData data;
          if (sensor->NextValue(data))
          {

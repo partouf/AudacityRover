@@ -13,7 +13,7 @@ LINKOBJ = $(OBJ)
 LIBS = -L"./lib/GoPiGo" -L"./lib/Crosscables/libGroundfloor" -L"./lib/Crosscables/libJumpropes" -L"./lib/OpenALRF" -L"./lib/raspicam/build/src" -L"./lib/cpp-sense-hat/lib" -lGoPiGo -lOpenALRF -lJumpropes -lGroundfloor -lraspicam -lsense-hat -lRTIMULib -lpthread -lrt
 BIN  = AudacityRover
 CXXINCS = -I"./lib" -I"./lib/Crosscables/include" -I"./lib/cpp-sense-hat/src"
-CXXFLAGS = $(CXXINCS) -fexceptions -std=c++11 -O2
+CXXFLAGS = $(CXXINCS) -g -fexceptions -std=c++11 -O2
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
