@@ -258,8 +258,6 @@ void AudacityRover::Modules::SensorSweep()
       LOGCUSTOM("Connecting?");
       SensorReceiver->Connect();
    }
-return;
-   std::cout << GetStatusInfo() << std::endl; 
 
    for (auto sensor : Sensors) 
    {

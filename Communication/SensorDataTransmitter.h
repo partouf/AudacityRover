@@ -36,5 +36,11 @@ namespace AudacityRover
       SensorDataTransmitter();
 
       void NewSensorData(const OpenALRF::SensorBusData3D ABusData) override;
+
+      // Inherited via ISensor3DBusListener
+      virtual void PowerOff() override;
+      virtual void PowerOn() override;
+      virtual bool IsPowered() const override;
+      virtual bool NextValue(OpenALRF::Sensor3DData & AValue) override;
    };
 };

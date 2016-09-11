@@ -17,6 +17,9 @@ namespace AudacityRover
    class SensorDataConnection : public Jumpropes::ThreadedConnection
    {
    protected:
+      Groundfloor::String Buffer;
+
+      void ProcessBuffer();
    public:
       SensorDataConnection(Jumpropes::BaseSocket *aSocket);
 

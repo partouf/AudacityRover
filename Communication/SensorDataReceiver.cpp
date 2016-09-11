@@ -66,17 +66,11 @@ bool AudacityRover::SensorDataReceiver::IsConnected()
    return ((Thread != nullptr) && Connection.isConnected());
 }
 
-AudacityRover::SensorDataConnection::SensorDataConnection(Jumpropes::BaseSocket * aSocket) : Jumpropes::ThreadedConnection(aSocket)
+void AudacityRover::SensorDataConnection::ProcessBuffer()
 {
-}
-
-void AudacityRover::SensorDataConnection::newMessageReceived(const String * sMessage)
-{
-   LOGFUNCTION();
-
-   if (sMessage->getLength() == 37)
+   while (Buffer.getLength() >= 37)
    {
-      char *Data = sMessage->getValue();
+      char *Data = Buffer.getValue();
       if ((Data[0] == 1) && (Data[36] == 23))
       {
          // only allow valid sensor packets
@@ -91,7 +85,20 @@ void AudacityRover::SensorDataConnection::newMessageReceived(const String * sMes
          memcpy(&SensorData.Data.Data2, Data + 20, 8);
          memcpy(&SensorData.Data.Data3, Data + 28, 8);
 
+         Buffer.remove(0, 36);
+
          Modules::Instance()->SensorBus->Broadcast(SensorData);
       }
    }
+}
+
+AudacityRover::SensorDataConnection::SensorDataConnection(Jumpropes::BaseSocket * aSocket) : Jumpropes::ThreadedConnection(aSocket)
+{
+}
+
+void AudacityRover::SensorDataConnection::newMessageReceived(const String * sMessage)
+{
+   Buffer.append(sMessage);
+
+   ProcessBuffer();
 }

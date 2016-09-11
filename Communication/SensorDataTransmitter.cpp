@@ -110,3 +110,21 @@ void AudacityRover::SensorDataTransmitter::NewSensorData(const OpenALRF::SensorB
       Server.BroadcastToClients(ABusData);
    }
 }
+
+void AudacityRover::SensorDataTransmitter::PowerOff()
+{
+}
+
+void AudacityRover::SensorDataTransmitter::PowerOn()
+{
+}
+
+bool AudacityRover::SensorDataTransmitter::IsPowered() const
+{
+   return false;
+}
+
+bool AudacityRover::SensorDataTransmitter::NextValue(OpenALRF::Sensor3DData & AValue)
+{
+   return false;
+}

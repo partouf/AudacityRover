@@ -194,7 +194,7 @@ int main()
                   }
                }
 
-               GFMillisleep(100);
+               GFMillisleep(5000);
             }
 
             if (Modules->System->ShouldQuit())
