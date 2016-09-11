@@ -12,7 +12,7 @@ bool AudacityRover::AccelerometerSenseHAT::NextValue(OpenALRF::Sensor3DData & AV
 {
    if (IsPowered())
    {
-      SenseHAT::d3 sensedata = HAT->get_magno();
+      SenseHAT::d3 sensedata = HAT->get_accel();
       if (sensedata.valid)
       {
          AValue.Timestamp = OpenALRF::GetCurrentTimestamp();
