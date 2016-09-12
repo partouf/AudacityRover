@@ -269,7 +269,7 @@ OpenALRF::OrderedCommand AudacityRover::Connection::ReadNextCommand(String * ADa
 
       skipcount += cmdlen;
 
-      AData->remove(0, skipcount);
+      AData->remove(0, skipcount - 1);
    }
 
    return BinCmd;
