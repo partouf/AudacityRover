@@ -4,7 +4,7 @@ OBJ_COMMUNICATION = Communication/CommunicationJumpropes.o Communication/SensorD
 OBJ_COMMAND = Command/CommandQueueDefault.o
 OBJ_PILOT = Pilot/RemotePilotGoPiGo.o
 OBJ_CAMERA = Camera/CameraRaspi.o
-OBJ_SENSORS = Sensors/DummySensor.o Sensors/SenseHATSensor.o Sensors/AccelerometerSenseHAT.o Sensors/MagnometerSenseHAT.o Sensors/GyroscopeSenseHAT.o Sensors/TemperatureSenseHAT.o
+OBJ_SENSORS = Sensors/DummySensor.o Sensors/SenseHATSensor.o Sensors/AccelerometerSenseHAT.o Sensors/MagnometerSenseHAT.o Sensors/GyroscopeSenseHAT.o Sensors/TemperatureSenseHAT.o Sensors/SystemTempSensor.o
 OBJ_SYSTEM = System/WatchCat.o System/SystemAudacity.o System/Logging.o System/Modules.o System/Configuration.o
 OBJ_MAIN = main.o
 
@@ -23,7 +23,7 @@ all: all-before $(BIN) all-after
 clean:
 	${RM} $(LINKOBJ) $(BIN)
 
-$(BIN): $(OBJ)
+$(BIN): $(OBJ) lib/GoPiGo/libGoPiGo.a lib/OpenALRF/libOpenALRF.a
 	$(CXX) $(LINKOBJ) -o "$(BIN)" $(LIBS)
 
 Command/CommandQueueDefault.o: Command/CommandQueueDefault.cpp
@@ -64,6 +64,9 @@ Sensors/TemperatureSenseHAT.o: Sensors/TemperatureSenseHAT.cpp
 
 Sensors/GyroscopeSenseHAT.o: Sensors/GyroscopeSenseHAT.cpp
 	$(CXX) -c Sensors/GyroscopeSenseHAT.cpp -o Sensors/GyroscopeSenseHAT.o $(CXXFLAGS)
+
+Sensors/SystemTempSensor.o: Sensors/SystemTempSensor.cpp
+	$(CXX) -c Sensors/SystemTempSensor.cpp -o Sensors/SystemTempSensor.o $(CXXFLAGS)
 
 System/Logging.o: System/Logging.cpp
 	$(CXX) -c System/Logging.cpp -o System/Logging.o $(CXXFLAGS)
