@@ -30,7 +30,7 @@ namespace AudacityRover
       std::string CameraFrontLeft;
       std::string CameraFrontRight;
 
-      OpenALRF::timestamp_t SecondsWhenToDeclareConnectionDead;
+      int32_t SecondsWhenToDeclareConnectionDead;
 
       static Configuration *Instance();
    };

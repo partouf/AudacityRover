@@ -6,6 +6,7 @@
 #include "../System/Modules.h"
 #include <iostream>
 #include <OpenALRF/Common/Timing.h>
+#include <inttypes.h>
 
 AudacityRover::SensorDataReceiver::SensorDataReceiver(const string AIPAddress)
 {
@@ -38,6 +39,11 @@ bool AudacityRover::SensorDataReceiver::Connect()
 
    if (Connection.connect())
    {
+      LOGCUSTOM("Connect() returned true");
+      if (!Connection.isConnected())
+      {
+        LOGCUSTOM("But connection is not connected???");
+      }
       Thread = new SensorDataConnection(&Connection);
       Thread->start();
 
@@ -72,10 +78,12 @@ void AudacityRover::SensorDataReceiver::KeepAlive()
 {
    if (!IsConnected())
    {
+      LOGCUSTOM("Connecting because not connected");
       Connect();
    }
    else if (!Thread->StillConsideredAlive())
    {
+      LOGCUSTOM("Connecting because not alive");
       Connect();
    }
 }
@@ -113,7 +121,7 @@ void AudacityRover::SensorDataConnection::StillHere()
 
 AudacityRover::SensorDataConnection::SensorDataConnection(Jumpropes::BaseSocket * aSocket) : Jumpropes::ThreadedConnection(aSocket)
 {
-   LastTimeDataReceived = OpenALRF::GetCurrentTimestamp();;
+   StillHere();
    DeclaredDeadAfter = Configuration::Instance()->SecondsWhenToDeclareConnectionDead;
 }
 
@@ -129,5 +137,5 @@ bool AudacityRover::SensorDataConnection::StillConsideredAlive() const
 {
    auto diff = OpenALRF::GetCurrentTimestamp() - LastTimeDataReceived;
 
-   return (diff > DeclaredDeadAfter);
+   return (diff < DeclaredDeadAfter);
 }
