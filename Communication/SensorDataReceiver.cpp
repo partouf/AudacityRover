@@ -5,6 +5,7 @@
 #include "../System/Configuration.h"
 #include "../System/Modules.h"
 #include <iostream>
+#include <OpenALRF/Common/Timing.h>
 
 AudacityRover::SensorDataReceiver::SensorDataReceiver(const string AIPAddress)
 {
@@ -29,7 +30,7 @@ bool AudacityRover::SensorDataReceiver::Connect()
    }
    else
    {
-      std::cout << "Cannot resolve " << Address.getValue() << std::endl;
+      std::cerr << "Cannot resolve " << Address.getValue() << std::endl;
       return false;
    }
 
@@ -44,6 +45,7 @@ bool AudacityRover::SensorDataReceiver::Connect()
    }
    else
    {
+      std::cerr << "Cannot connect to sensordata port on " << Address.getValue() << std::endl;
       return false;
    }
 }
@@ -64,6 +66,18 @@ void AudacityRover::SensorDataReceiver::Disconnect()
 bool AudacityRover::SensorDataReceiver::IsConnected()
 {
    return ((Thread != nullptr) && Connection.isConnected());
+}
+
+void AudacityRover::SensorDataReceiver::KeepAlive()
+{
+   if (!IsConnected())
+   {
+      Connect();
+   }
+   else if (!Thread->StillConsideredAlive())
+   {
+      Connect();
+   }
 }
 
 void AudacityRover::SensorDataConnection::ProcessBuffer()
@@ -92,13 +106,28 @@ void AudacityRover::SensorDataConnection::ProcessBuffer()
    }
 }
 
+void AudacityRover::SensorDataConnection::StillHere()
+{
+   LastTimeDataReceived = OpenALRF::GetCurrentTimestamp();
+}
+
 AudacityRover::SensorDataConnection::SensorDataConnection(Jumpropes::BaseSocket * aSocket) : Jumpropes::ThreadedConnection(aSocket)
 {
+   LastTimeDataReceived = OpenALRF::GetCurrentTimestamp();;
+   DeclaredDeadAfter = Configuration::Instance()->SecondsWhenToDeclareConnectionDead;
 }
 
 void AudacityRover::SensorDataConnection::newMessageReceived(const String * sMessage)
 {
+   StillHere();
    Buffer.append(sMessage);
 
    ProcessBuffer();
+}
+
+bool AudacityRover::SensorDataConnection::StillConsideredAlive() const
+{
+   auto diff = OpenALRF::GetCurrentTimestamp() - LastTimeDataReceived;
+
+   return (diff > DeclaredDeadAfter);
 }

@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <OpenALRF/Communication/SensorBusTypes.h>
+#include <OpenALRF/Common/Types.h>
 
 namespace AudacityRover
 {
@@ -28,6 +29,8 @@ namespace AudacityRover
 
       std::string CameraFrontLeft;
       std::string CameraFrontRight;
+
+      OpenALRF::timestamp_t SecondsWhenToDeclareConnectionDead;
 
       static Configuration *Instance();
    };

@@ -7,6 +7,8 @@
 #include <Jumpropes/ClientSocket.h>
 #include <Jumpropes/BaseSocket.h>
 
+#include <OpenALRF/Common/Types.h>
+
 #include <vector>
 #include <string>
 
@@ -18,12 +20,17 @@ namespace AudacityRover
    {
    protected:
       Groundfloor::String Buffer;
+      OpenALRF::timestamp_t LastTimeDataReceived;
+      OpenALRF::timestamp_t DeclaredDeadAfter;
 
       void ProcessBuffer();
+      void StillHere();
    public:
       SensorDataConnection(Jumpropes::BaseSocket *aSocket);
 
       void newMessageReceived(const Groundfloor::String * sMessage) override;
+
+      bool StillConsideredAlive() const;
    };
 
    class SensorDataReceiver
@@ -32,12 +39,14 @@ namespace AudacityRover
       Groundfloor::String Address;
       Jumpropes::ClientSocket Connection;
       SensorDataConnection *Thread;
+
+      bool IsConnected();
    public:
       SensorDataReceiver(const string AIPAddress);
 
       bool Connect();
       void Disconnect();
 
-      bool IsConnected();
+      void KeepAlive();
    };
 };

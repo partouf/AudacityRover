@@ -5,7 +5,7 @@
 #define pi1hostname "pi1"
 
 #ifdef GF_OS_WIN32
-#define pi2hostname "testpc"
+#define pi2hostname "vidmixer"
 #else
 #define pi2hostname "pi2"
 #endif
@@ -33,6 +33,8 @@ AudacityRover::Configuration::Configuration()
 
    CameraFrontLeft      = pi2hostname;
    CameraFrontRight     = pi1hostname;
+
+   SecondsWhenToDeclareConnectionDead = 10;
 }
 
 AudacityRover::Configuration * AudacityRover::Configuration::Instance()

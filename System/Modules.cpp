@@ -253,11 +253,7 @@ void AudacityRover::Modules::SensorSweep()
 {
    LOGFUNCTION();
 
-   if (!SensorReceiver->IsConnected())
-   {
-      LOGCUSTOM("Connecting?");
-      SensorReceiver->Connect();
-   }
+   SensorReceiver->KeepAlive();
 
    for (auto sensor : Sensors) 
    {
@@ -265,6 +261,7 @@ void AudacityRover::Modules::SensorSweep()
       if (sensor == nullptr)
       {
          LOGCUSTOM("nullptr");
+         continue;
       }
 
       if (sensor->GetOrigin() == OpenALRF::sensoriLocal)
