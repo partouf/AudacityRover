@@ -153,6 +153,7 @@
     <ClCompile Include="Sensors\GyroscopeSenseHAT.cpp" />
     <ClCompile Include="Sensors\MagnometerSenseHAT.cpp" />
     <ClCompile Include="Sensors\SenseHATSensor.cpp" />
+    <ClCompile Include="Sensors\SystemTempSensor.cpp" />
     <ClCompile Include="Sensors\TemperatureSenseHAT.cpp" />
     <ClCompile Include="System\Configuration.cpp" />
     <ClCompile Include="System\Logging.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Sensors\GyroscopeSenseHAT.h" />
     <ClInclude Include="Sensors\MagnometerSenseHAT.h" />
     <ClInclude Include="Sensors\SenseHATSensor.h" />
+    <ClInclude Include="Sensors\SystemTempSensor.h" />
     <ClInclude Include="Sensors\TemperatureSenseHAT.h" />
     <ClInclude Include="Sensors\DummySensor.h" />
     <ClInclude Include="System\Configuration.h" />

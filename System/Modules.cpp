@@ -15,6 +15,7 @@
 #include "../Sensors/TemperatureSenseHAT.h"
 #include "../Sensors/GyroscopeSenseHAT.h"
 #include "../Sensors/DummySensor.h"
+#include "../Sensors/SystemTempSensor.h"
 #include <stdexcept>
 
 #ifdef USENULLBOARD
@@ -164,6 +165,28 @@ AudacityRover::Modules::Modules()
       //Humidity1 = new OpenALRF::ProxySensor(Configuration->Humidity1.ID);
    }
 
+   if (Computername.match(Configuration->SystemTemp1.IPAddress))
+   {
+      SystemTemp1 = new SystemTempSensor(Configuration->SystemTemp1.ID);
+   }
+   else
+   {
+      SystemTemp1 = new OpenALRF::ProxySensor(Configuration->SystemTemp1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(SystemTemp1));
+   }
+   Sensors.push_back(SystemTemp1);
+
+   if (Computername.match(Configuration->SystemTemp2.IPAddress))
+   {
+      SystemTemp2 = new SystemTempSensor(Configuration->SystemTemp2.ID);
+   }
+   else
+   {
+      SystemTemp2 = new OpenALRF::ProxySensor(Configuration->SystemTemp2.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(SystemTemp2));
+   }
+   Sensors.push_back(SystemTemp2);
+
    if (Computername.match(Configuration->Dummy1.IPAddress))
    {
       Dummy1 = new DummySensor(Configuration->Dummy1.ID);
@@ -243,6 +266,8 @@ std::string AudacityRover::Modules::GetStatusInfo()
    info += GetModuleInfoXML("Temperature1", Temperature1);
 //   info += GetModuleInfoXML("Barometer1", Barometer1);
 //   info += GetModuleInfoXML("Humidity1", Humidity1);
+   info += GetModuleInfoXML("SystemTemp1", SystemTemp1);
+   info += GetModuleInfoXML("SystemTemp2", SystemTemp2);
    info += GetModuleInfoXML("Dummy1", Dummy1);
    info += GetModuleInfoXML("Dummy2", Dummy2);
 

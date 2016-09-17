@@ -27,6 +27,9 @@ namespace AudacityRover
       OpenALRF::SensorConfig Dummy1;
       OpenALRF::SensorConfig Dummy2;
 
+      OpenALRF::SensorConfig SystemTemp1;
+      OpenALRF::SensorConfig SystemTemp2;
+
       std::string CameraFrontLeft;
       std::string CameraFrontRight;
 

@@ -31,6 +31,9 @@ AudacityRover::Configuration::Configuration()
    Dummy1               = { 21, pi1hostname };
    Dummy2               = { 22, pi2hostname };
 
+   SystemTemp1          = { 31, pi1hostname };
+   SystemTemp2          = { 32, pi2hostname };
+
    CameraFrontLeft      = pi2hostname;
    CameraFrontRight     = pi1hostname;
 

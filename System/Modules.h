@@ -56,6 +56,9 @@ namespace AudacityRover
       //OpenALRF::ISensor *Barometer1;
       //OpenALRF::ISensor *Humidity1;
 
+      OpenALRF::ISensor *SystemTemp1;
+      OpenALRF::ISensor *SystemTemp2;
+
       OpenALRF::ISensor *Dummy1;
       OpenALRF::ISensor *Dummy2;
 
