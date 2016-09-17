@@ -46,6 +46,8 @@ bool AudacityRover::SystemTempSensor::NextValue(OpenALRF::Sensor3DData & AValue)
       AValue.Data2 = 0;
       AValue.Data3 = 0;
 
+      LatestSensorData = AValue;
+
       return true;
    }
 
