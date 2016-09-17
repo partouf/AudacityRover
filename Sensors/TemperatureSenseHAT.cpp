@@ -14,11 +14,11 @@ bool AudacityRover::TemperatureSenseHAT::NextValue(OpenALRF::Sensor3DData &AValu
    if (IsPowered())
    {
       auto data = HAT->get_temperature();
-      if (!std::isnan(data))
+      if (data.valid)
       {
          AValue.Timestamp = OpenALRF::GetCurrentTimestamp();
-         AValue.Data1 = data;
-         AValue.Data2 = 0;
+         AValue.Data1 = data.x;
+         AValue.Data2 = data.y;
          AValue.Data3 = 0;
 
          LatestSensorData = AValue;
