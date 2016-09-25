@@ -16,6 +16,6 @@ namespace AudacityRover {
       virtual void PowerOn() override;
       virtual bool IsPowered() const override;
 
-      virtual std::string GetStatusInfo() override;
+      virtual std::string GetStatusInfo() const override;
    };
 };

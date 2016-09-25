@@ -24,7 +24,7 @@ bool AudacityRover::SystemAudacity::HasValidActiveNetwork()
    return HasNetwork;
 }
 
-std::string AudacityRover::SystemAudacity::GetStatusInfo()
+std::string AudacityRover::SystemAudacity::GetStatusInfo() const
 {
    std::string suggeststatusstr = "";
 

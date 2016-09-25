@@ -66,7 +66,7 @@ OpenALRF::CapturedImage AudacityRover::CameraRaspi::GetLatestImage()
    return LatestImage;
 }
 
-std::string AudacityRover::CameraRaspi::GetStatusInfo()
+std::string AudacityRover::CameraRaspi::GetStatusInfo() const
 {
    return "";
 }

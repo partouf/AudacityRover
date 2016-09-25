@@ -58,7 +58,7 @@ void AudacityRover::CommunicationJumpropes::InitializeStationConnection(Jumprope
    LOGFUNCTION();
 }
 
-std::string AudacityRover::CommunicationJumpropes::GetStatusInfo()
+std::string AudacityRover::CommunicationJumpropes::GetStatusInfo() const
 {
    return "";
 }
@@ -79,7 +79,7 @@ void AudacityRover::Receiver::Cleanup()
 {
    LOGCUSTOM(std::to_string(Clients.size()));
 
-   for (long i = 0; i < Clients.size(); ++i)
+   for (unsigned int i = 0; i < Clients.size(); ++i)
    {
       Connection *Conn = static_cast<Connection *>(Clients.elementAt(i));
       if (Conn != nullptr)
@@ -350,7 +350,7 @@ void AudacityRover::Connection::ReplyWithFile(const String * AFile)
       auto bytesread = file.gcount();
       while (bytesread > 0)
       {
-         Data.append(buffer, bytesread);
+         Data.append(buffer, static_cast<unsigned int>(bytesread));
 
          file.read(buffer, 1024);
          bytesread = file.gcount();

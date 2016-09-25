@@ -26,7 +26,7 @@
 
 AudacityRover::Modules *ModulesInstance = nullptr;
 
-std::string AudacityRover::Modules::GetModuleInfoXML(std::string AModuleName, OpenALRF::IModule * AModule)
+std::string AudacityRover::Modules::GetModuleInfoXML(std::string AModuleName, OpenALRF::IModule * AModule) const
 {
    std::string info;
    info += "<";
@@ -250,7 +250,7 @@ AudacityRover::Modules * AudacityRover::Modules::Instance()
    return ModulesInstance;
 }
 
-std::string AudacityRover::Modules::GetStatusInfo()
+std::string AudacityRover::Modules::GetStatusInfo() const
 {
    std::string info;
    info += GetModuleInfoXML("System", System);

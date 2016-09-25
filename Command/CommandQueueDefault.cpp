@@ -119,14 +119,12 @@ void AudacityRover::CommandQueue::Process()
    DoNextCommand();
 }
 
-std::string AudacityRover::CommandQueue::GetStatusInfo()
+std::string AudacityRover::CommandQueue::GetStatusInfo() const
 {
    std::string Data;
 
    Data += "<queuesize>";
-   Groundfloor::BValue Val;
-   Val.setInteger(Queue.size());
-   Data += Val.asString()->getValue();
+   Data += std::to_string(Queue.size());
    Data += "</queuesize>";
 
    return Data;

@@ -21,6 +21,6 @@ namespace AudacityRover
 
       virtual OpenALRF::CapturedImage GetLatestImage() override;
 
-      virtual std::string GetStatusInfo() override;
+      virtual std::string GetStatusInfo() const override;
    };
 };

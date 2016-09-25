@@ -22,7 +22,7 @@ namespace AudacityRover
    protected:
       std::vector<OpenALRF::ISensor *> Sensors;
 
-      std::string GetModuleInfoXML(std::string AModuleName, OpenALRF::IModule *AModule);
+      std::string GetModuleInfoXML(std::string AModuleName, OpenALRF::IModule *AModule) const;
    public:
       Modules();
       ~Modules();
@@ -62,7 +62,7 @@ namespace AudacityRover
       OpenALRF::ISensor *Dummy1;
       OpenALRF::ISensor *Dummy2;
 
-      std::string GetStatusInfo();
+      std::string GetStatusInfo() const;
 
       void SensorSweep();
    };

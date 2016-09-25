@@ -37,7 +37,7 @@ bool AudacityRover::SenseHATSensor::IsPowered() const
    return (HAT != nullptr);
 }
 
-std::string AudacityRover::SenseHATSensor::GetStatusInfo()
+std::string AudacityRover::SenseHATSensor::GetStatusInfo() const
 {
    std::string info = ISensor::GetStatusInfo();
 

@@ -33,6 +33,6 @@ namespace AudacityRover
       virtual void Stop() override;
 
       // Inherited via IRemotePilot
-      virtual std::string GetStatusInfo() override;
+      virtual std::string GetStatusInfo() const override;
    };
 };

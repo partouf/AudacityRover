@@ -70,6 +70,6 @@ namespace AudacityRover
       void SendToStation(const std::string AMessage) override;
 
       // Inherited via ICommunication
-      virtual std::string GetStatusInfo() override;
+      virtual std::string GetStatusInfo() const override;
    };
 };

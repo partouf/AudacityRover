@@ -31,6 +31,6 @@ namespace AudacityRover
       void Process();
 
       // Inherited via ICommandQueue
-      std::string GetStatusInfo() override;
+      std::string GetStatusInfo() const override;
    };
 };

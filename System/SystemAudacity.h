@@ -12,6 +12,6 @@ namespace AudacityRover
       bool HasValidActiveNetwork() override;
 
       // Inherited via SystemLinux
-      virtual std::string GetStatusInfo() override;
+      virtual std::string GetStatusInfo() const override;
    };
 }

@@ -208,23 +208,24 @@ void AudacityRover::RemotePilotGoPiGo::Stop()
    Wheels->Stop();
 }
 
-std::string AudacityRover::RemotePilotGoPiGo::GetStatusInfo()
+std::string AudacityRover::RemotePilotGoPiGo::GetStatusInfo() const
 {
    std::string Data;
 
    Groundfloor::BValue Val;
 
-   Val.setInteger(Modules::Instance()->GoPiGoMainBoard->GetCpuSpeed());
+   auto modules = Modules::Instance();
+   Val.setInteger(modules->GoPiGoMainBoard->GetCpuSpeed());
    Data += "<cpuspeed>";
    Data += Val.asString()->getValue();
    Data += "</cpuspeed>";
 
-   Val.setInteger(Modules::Instance()->GoPiGoMainBoard->GetBoardVersion());
+   Val.setInteger(modules->GoPiGoMainBoard->GetBoardVersion());
    Data += "<boardversion>";
    Data += Val.asString()->getValue();
    Data += "</boardversion>";
 
-   Val.setDouble(Modules::Instance()->GoPiGoMainBoard->GetVoltage());
+   Val.setDouble(modules->GoPiGoMainBoard->GetVoltage());
    Data += "<voltage>";
    Data += Val.asString()->getValue();
    Data += "</voltage>";
