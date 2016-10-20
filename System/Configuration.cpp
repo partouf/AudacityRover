@@ -28,6 +28,8 @@ AudacityRover::Configuration::Configuration()
    Barometer1           = { 15, pi1hostname };
    Humidity1            = { 16, pi1hostname };
 
+   Compass1             = { 17, pi1hostname };
+
    Dummy1               = { 21, pi1hostname };
    Dummy2               = { 22, pi2hostname };
 

@@ -21,7 +21,7 @@ OpenALRF::degrees_t CurrentAngle = 0;
 
 void RebootSystem()
 {
-   auto Queue = AudacityRover::Modules::Instance()->CommandQueue;
+   auto Queue = AudacityRover::Modules::Instance()->CommandQueue.get();
 
    Queue->Add({ OpenALRF::modSystem, OpenALRF::actSystemReboot });
    Queue->Process();
@@ -67,7 +67,7 @@ double GetDistanceBetweenMapSearchNodes(const OpenALRF::MapSearchNode *ANodeCurr
 
 OpenALRF::degrees_t MakeCommandsFromMapSearchDifference(const OpenALRF::MapSearchNode *ANodeCurrent, const OpenALRF::MapSearchNode *ANodeNext, const OpenALRF::degrees_t ACurrentAngle)
 {
-   auto Queue = AudacityRover::Modules::Instance()->CommandQueue;
+   auto Queue = AudacityRover::Modules::Instance()->CommandQueue.get();
 
    int16_t distance = static_cast<int16_t>(GetDistanceBetweenMapSearchNodes(ANodeCurrent, ANodeNext) * 60);
    int angle = GetAngleBetweenMapSearchNodes(ANodeCurrent, ANodeNext);

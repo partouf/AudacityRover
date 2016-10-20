@@ -10,8 +10,9 @@
 #include <OpenALRF/System/System.h>
 #include <OpenALRF/Communication/SensorBus.h>
 #include <OpenALRF/Communication/Communication.h>
-#include "../Communication/SensorDataReceiver.h"
 
+#include "../Communication/SensorDataReceiver.h"
+#include "../System/Configuration.h"
 #include "../System/Logging.h"
 #include "../System/WatchCat.h"
 
@@ -22,45 +23,55 @@ namespace AudacityRover
    protected:
       std::vector<OpenALRF::ISensor *> Sensors;
 
-      std::string GetModuleInfoXML(std::string AModuleName, OpenALRF::IModule *AModule) const;
+      void LinkGoPiGo(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration);
+      void LinkAccelerometer(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration);
+      void LinkDummy2(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration);
+      void LinkDummy1(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration);
+      void LinkSystemTemp2(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration);
+      void LinkSystemTemp1(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration);
+      void LinkTemperature(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration);
+      void LinkMagnometer(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration);
+      void LinkGyroscope(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration);
+
+      std::string GetModuleInfoXML(const std::string AModuleName, const OpenALRF::IModule *AModule) const;
    public:
       Modules();
       ~Modules();
 
       static Modules *Instance();
 
-      AudacityRover::ILogging *Logging;
+      std::unique_ptr<AudacityRover::ILogging> Logging;
 
-      GoPiGo::IBoard *GoPiGoMainBoard;
-      GoPiGo::Wheels *Wheels;
-      GoPiGo::WheelEncodersWithErrorDetection *Encoders;
+      std::unique_ptr<GoPiGo::IBoard> GoPiGoMainBoard;
+      std::unique_ptr<GoPiGo::Wheels> Wheels;
+      std::unique_ptr<GoPiGo::WheelEncodersWithErrorDetection> Encoders;
 
-      OpenALRF::IRemotePilot *Pilot;
-      OpenALRF::IAutoPilot *Auto;
-      OpenALRF::IMainCamera *MainCamera;
-      OpenALRF::ISystem *System;
-      OpenALRF::SensorBus *SensorBus;
+      std::unique_ptr<OpenALRF::IRemotePilot> Pilot;
+      std::unique_ptr<OpenALRF::IAutoPilot> Auto;
+      std::unique_ptr<OpenALRF::IMainCamera> MainCamera;
+      std::unique_ptr<OpenALRF::ISystem> System;
+      std::unique_ptr<OpenALRF::SensorBus> SensorBus;
 
-      OpenALRF::ICommandQueue *CommandQueue;
+      std::unique_ptr<OpenALRF::ICommandQueue> CommandQueue;
 
-      OpenALRF::ICommunication *Comm;
+      std::unique_ptr<OpenALRF::ICommunication> Comm;
 
-      AudacityRover::WatchCat *Cat;
-      OpenALRF::ISensor3DBusListener *SensorTransmitter;
-      AudacityRover::SensorDataReceiver *SensorReceiver;
+      std::unique_ptr<AudacityRover::WatchCat> Cat;
+      std::unique_ptr<OpenALRF::ISensor3DBusListener> SensorTransmitter;
+      std::unique_ptr<AudacityRover::SensorDataReceiver> SensorReceiver;
 
-      OpenALRF::ISensor *Accelerometer1;
-      OpenALRF::ISensor *Gyroscope1;
-      OpenALRF::ISensor *Magnometer1;
-      OpenALRF::ISensor *Temperature1;
+      std::unique_ptr<OpenALRF::ISensor> Accelerometer1;
+      std::unique_ptr<OpenALRF::ISensor> Gyroscope1;
+      std::unique_ptr<OpenALRF::ISensor> Magnometer1;
+      std::unique_ptr<OpenALRF::ISensor> Temperature1;
       //OpenALRF::ISensor *Barometer1;
       //OpenALRF::ISensor *Humidity1;
 
-      OpenALRF::ISensor *SystemTemp1;
-      OpenALRF::ISensor *SystemTemp2;
+      std::unique_ptr<OpenALRF::ISensor> SystemTemp1;
+      std::unique_ptr<OpenALRF::ISensor> SystemTemp2;
 
-      OpenALRF::ISensor *Dummy1;
-      OpenALRF::ISensor *Dummy2;
+      std::unique_ptr<OpenALRF::ISensor> Dummy1;
+      std::unique_ptr<OpenALRF::ISensor> Dummy2;
 
       std::string GetStatusInfo() const;
 

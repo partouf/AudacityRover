@@ -21,9 +21,9 @@ void AudacityRover::CommandQueue::DoNextCommand()
 
 void AudacityRover::CommandQueue::DoCommand(OpenALRF::Command ACmd)
 {
-   auto Pilot = Modules::Instance()->Pilot;
-   auto System = Modules::Instance()->System;
-   auto MainCamera = Modules::Instance()->MainCamera;
+   auto Pilot = Modules::Instance()->Pilot.get();
+   auto System = Modules::Instance()->System.get();
+   auto MainCamera = Modules::Instance()->MainCamera.get();
 
    if (ACmd.Module == OpenALRF::modSystem)
    {

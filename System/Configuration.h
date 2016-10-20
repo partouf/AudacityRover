@@ -23,6 +23,7 @@ namespace AudacityRover
       OpenALRF::SensorConfig Temperature1;
       OpenALRF::SensorConfig Barometer1;
       OpenALRF::SensorConfig Humidity1;
+      OpenALRF::SensorConfig Compass1;
 
       OpenALRF::SensorConfig Dummy1;
       OpenALRF::SensorConfig Dummy2;

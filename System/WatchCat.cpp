@@ -5,7 +5,7 @@
 
 void AudacityRover::WatchCat::MinorAct()
 {
-   auto Queue = Modules::Instance()->CommandQueue;
+   auto Queue = Modules::Instance()->CommandQueue.get();
 
    Queue->Add({ OpenALRF::modSystem, OpenALRF::actSystemRestartNetIF, 0, 0, "eth0" });
    Queue->Add({ OpenALRF::modSystem, OpenALRF::actSystemRestartNetIF, 0, 0, "wlan0" });

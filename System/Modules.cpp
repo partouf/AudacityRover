@@ -8,7 +8,6 @@
 #include "../Communication/SensorDataTransmitter.h"
 #include "../Communication/SensorDataReceiver.h"
 #include <Jumpropes/Functions.h>
-#include "../System/Configuration.h"
 #include <OpenALRF/Sensors/ProxySensor.h>
 #include "../Sensors/AccelerometerSenseHAT.h"
 #include "../Sensors/MagnometerSenseHAT.h"
@@ -26,7 +25,7 @@
 
 AudacityRover::Modules *ModulesInstance = nullptr;
 
-std::string AudacityRover::Modules::GetModuleInfoXML(std::string AModuleName, OpenALRF::IModule * AModule) const
+std::string AudacityRover::Modules::GetModuleInfoXML(const std::string AModuleName, const OpenALRF::IModule *AModule) const
 {
    std::string info;
    info += "<";
@@ -50,18 +49,18 @@ std::string AudacityRover::Modules::GetModuleInfoXML(std::string AModuleName, Op
 
 AudacityRover::Modules::Modules()
 {
-   Logging = new AudacityRover::Logging();
+   Logging = std::make_unique<AudacityRover::Logging>();
 
-   System = new AudacityRover::SystemAudacity();
-   MainCamera = new AudacityRover::CameraRaspi();
-   SensorBus = new OpenALRF::SensorBus();
-   CommandQueue = new AudacityRover::CommandQueue();
-   Comm = new AudacityRover::CommunicationJumpropes();
+   System = std::make_unique<AudacityRover::SystemAudacity>();
+   MainCamera = std::make_unique<AudacityRover::CameraRaspi>();
+   SensorBus = std::make_unique<OpenALRF::SensorBus>();
+   CommandQueue = std::make_unique<AudacityRover::CommandQueue>();
+   Comm = std::make_unique<AudacityRover::CommunicationJumpropes>();
 
-   SensorTransmitter = new AudacityRover::SensorDataTransmitter();
-   SensorBus->Subscribe(SensorTransmitter);
+   SensorTransmitter = std::make_unique<AudacityRover::SensorDataTransmitter>();
+   SensorBus->Subscribe(SensorTransmitter.get());
 
-   Cat = new AudacityRover::WatchCat();
+   Cat = std::make_unique<AudacityRover::WatchCat>();
 
    Groundfloor::String Computername;
    if (!Jumpropes::TryToGetComputerName(&Computername))
@@ -71,26 +70,39 @@ AudacityRover::Modules::Modules()
 
    auto Configuration = Configuration::Instance();
 
-   if (Computername.match(Configuration->GoPiGo))
+   LinkGoPiGo(Computername, Configuration);
+   LinkAccelerometer(Computername, Configuration);
+   LinkGyroscope(Computername, Configuration);
+   LinkMagnometer(Computername, Configuration);
+   LinkTemperature(Computername, Configuration);
+   LinkSystemTemp1(Computername, Configuration);
+   LinkSystemTemp2(Computername, Configuration);
+   LinkDummy1(Computername, Configuration);
+   LinkDummy2(Computername, Configuration);
+}
+
+void AudacityRover::Modules::LinkGoPiGo(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration)
+{
+   if (Computername.match(AConfiguration->GoPiGo))
    {
-      #ifdef USENULLBOARD
-      GoPiGoMainBoard = new GoPiGo::NullBoard(1);
-      #else
-      GoPiGoMainBoard = new GoPiGo::LinuxBoard(1);
-      #endif
+#ifdef USENULLBOARD
+      GoPiGoMainBoard = std::make_unique<GoPiGo::NullBoard>(1);
+#else
+      GoPiGoMainBoard = std::make_unique<GoPiGo::LinuxBoard>(1);
+#endif
 
       if (!GoPiGoMainBoard->Connect())
       {
          throw new std::runtime_error(GoPiGoMainBoard->LastKnownError.c_str());
       }
 
-      Wheels = new GoPiGo::Wheels(GoPiGoMainBoard);
-      Encoders = new GoPiGo::WheelEncodersWithErrorDetection(GoPiGoMainBoard);
+      Wheels = std::make_unique<GoPiGo::Wheels>(GoPiGoMainBoard.get());
+      Encoders = std::make_unique<GoPiGo::WheelEncodersWithErrorDetection>(GoPiGoMainBoard.get());
 
-      Pilot = new AudacityRover::RemotePilotGoPiGo();
+      Pilot = std::make_unique<AudacityRover::RemotePilotGoPiGo>();
       Auto = nullptr;// new AutoPilotDefault();
 
-      SensorReceiver = new AudacityRover::SensorDataReceiver(Configuration->RTIMU);
+      SensorReceiver = std::make_unique<AudacityRover::SensorDataReceiver>(AConfiguration->RTIMU);
    }
    else
    {
@@ -100,114 +112,120 @@ AudacityRover::Modules::Modules()
       Pilot = nullptr;
       Auto = nullptr;
 
-      SensorReceiver = new AudacityRover::SensorDataReceiver(Configuration->GoPiGo);
+      SensorReceiver = std::make_unique<AudacityRover::SensorDataReceiver>(AConfiguration->GoPiGo);
    }
+}
 
-   if (Computername.match(Configuration->Accelerometer1.IPAddress))
+void AudacityRover::Modules::LinkAccelerometer(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration)
+{
+   if (Computername.match(AConfiguration->Accelerometer1.IPAddress))
    {
-      Accelerometer1 = new AudacityRover::AccelerometerSenseHAT(Configuration->Accelerometer1.ID);
+      Accelerometer1 = std::make_unique<AudacityRover::AccelerometerSenseHAT>(AConfiguration->Accelerometer1.ID);
    }
    else
    {
-      Accelerometer1 = new OpenALRF::ProxySensor(Configuration->Accelerometer1.ID);
-      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Accelerometer1));
+      Accelerometer1 = std::make_unique<OpenALRF::ProxySensor>(AConfiguration->Accelerometer1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Accelerometer1.get()));
    }
-   Sensors.push_back(Accelerometer1);
+   Sensors.push_back(Accelerometer1.get());
+}
 
-   if (Computername.match(Configuration->Gyroscope1.IPAddress))
+void AudacityRover::Modules::LinkDummy2(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration)
+{
+   if (Computername.match(AConfiguration->Dummy2.IPAddress))
    {
-      Gyroscope1 = new AudacityRover::GyroscopeSenseHAT(Configuration->Gyroscope1.ID);
+      Dummy2 = std::make_unique<AudacityRover::DummySensor>(AConfiguration->Dummy2.ID);
    }
    else
    {
-      Gyroscope1 = new OpenALRF::ProxySensor(Configuration->Gyroscope1.ID);
-      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Gyroscope1));
+      Dummy2 = std::make_unique<OpenALRF::ProxySensor>(AConfiguration->Dummy2.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Dummy2.get()));
    }
-   Sensors.push_back(Gyroscope1);
+   Sensors.push_back(Dummy2.get());
+}
 
-   if (Computername.match(Configuration->Magnometer1.IPAddress))
+void AudacityRover::Modules::LinkDummy1(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration)
+{
+   if (Computername.match(AConfiguration->Dummy1.IPAddress))
    {
-      Magnometer1 = new AudacityRover::MagnometerSenseHAT(Configuration->Magnometer1.ID);
+      Dummy1 = std::make_unique<AudacityRover::DummySensor>(AConfiguration->Dummy1.ID);
    }
    else
    {
-      Magnometer1 = new OpenALRF::ProxySensor(Configuration->Magnometer1.ID);
-      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Magnometer1));
+      Dummy1 = std::make_unique<OpenALRF::ProxySensor>(AConfiguration->Dummy1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Dummy1.get()));
    }
-   Sensors.push_back(Magnometer1);
+   Sensors.push_back(Dummy1.get());
+}
 
-   if (Computername.match(Configuration->Temperature1.IPAddress))
+void AudacityRover::Modules::LinkSystemTemp2(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration)
+{
+   if (Computername.match(AConfiguration->SystemTemp2.IPAddress))
    {
-      Temperature1 = new AudacityRover::TemperatureSenseHAT(Configuration->Temperature1.ID);
+      SystemTemp2 = std::make_unique<AudacityRover::SystemTempSensor>(AConfiguration->SystemTemp2.ID);
    }
    else
    {
-      Temperature1 = new OpenALRF::ProxySensor(Configuration->Temperature1.ID);
-      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Temperature1));
+      SystemTemp2 = std::make_unique<OpenALRF::ProxySensor>(AConfiguration->SystemTemp2.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(SystemTemp2.get()));
    }
-   Sensors.push_back(Temperature1);
+   Sensors.push_back(SystemTemp2.get());
+}
 
-   if (Computername.match(Configuration->Barometer1.IPAddress))
+void AudacityRover::Modules::LinkSystemTemp1(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration)
+{
+   if (Computername.match(AConfiguration->SystemTemp1.IPAddress))
    {
-      //Barometer1 = new 
+      SystemTemp1 = std::make_unique<AudacityRover::SystemTempSensor>(AConfiguration->SystemTemp1.ID);
    }
    else
    {
-      //Barometer1 = new OpenALRF::ProxySensor(Configuration->Barometer1.ID);
+      SystemTemp1 = std::make_unique<OpenALRF::ProxySensor>(AConfiguration->SystemTemp1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(SystemTemp1.get()));
    }
+   Sensors.push_back(SystemTemp1.get());
+}
 
-   if (Computername.match(Configuration->Humidity1.IPAddress))
+void AudacityRover::Modules::LinkTemperature(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration)
+{
+   if (Computername.match(AConfiguration->Temperature1.IPAddress))
    {
-      //Humidity1 = new 
+      Temperature1 = std::make_unique<AudacityRover::TemperatureSenseHAT>(AConfiguration->Temperature1.ID);
    }
    else
    {
-      //Humidity1 = new OpenALRF::ProxySensor(Configuration->Humidity1.ID);
+      Temperature1 = std::make_unique<OpenALRF::ProxySensor>(AConfiguration->Temperature1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Temperature1.get()));
    }
+   Sensors.push_back(Temperature1.get());
+}
 
-   if (Computername.match(Configuration->SystemTemp1.IPAddress))
+void AudacityRover::Modules::LinkMagnometer(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration)
+{
+   if (Computername.match(AConfiguration->Magnometer1.IPAddress))
    {
-      SystemTemp1 = new SystemTempSensor(Configuration->SystemTemp1.ID);
+      Magnometer1 = std::make_unique<AudacityRover::MagnometerSenseHAT>(AConfiguration->Magnometer1.ID);
    }
    else
    {
-      SystemTemp1 = new OpenALRF::ProxySensor(Configuration->SystemTemp1.ID);
-      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(SystemTemp1));
+      Magnometer1 = std::make_unique<OpenALRF::ProxySensor>(AConfiguration->Magnometer1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Magnometer1.get()));
    }
-   Sensors.push_back(SystemTemp1);
+   Sensors.push_back(Magnometer1.get());
+}
 
-   if (Computername.match(Configuration->SystemTemp2.IPAddress))
+void AudacityRover::Modules::LinkGyroscope(Groundfloor::String &Computername, AudacityRover::Configuration * AConfiguration)
+{
+   if (Computername.match(AConfiguration->Gyroscope1.IPAddress))
    {
-      SystemTemp2 = new SystemTempSensor(Configuration->SystemTemp2.ID);
+      Gyroscope1 = std::make_unique<AudacityRover::GyroscopeSenseHAT>(AConfiguration->Gyroscope1.ID);
    }
    else
    {
-      SystemTemp2 = new OpenALRF::ProxySensor(Configuration->SystemTemp2.ID);
-      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(SystemTemp2));
+      Gyroscope1 = std::make_unique<OpenALRF::ProxySensor>(AConfiguration->Gyroscope1.ID);
+      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Gyroscope1.get()));
    }
-   Sensors.push_back(SystemTemp2);
-
-   if (Computername.match(Configuration->Dummy1.IPAddress))
-   {
-      Dummy1 = new DummySensor(Configuration->Dummy1.ID);
-   }
-   else
-   {
-      Dummy1 = new OpenALRF::ProxySensor(Configuration->Dummy1.ID);
-      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Dummy1));
-   }
-   Sensors.push_back(Dummy1);
-
-   if (Computername.match(Configuration->Dummy2.IPAddress))
-   {
-      Dummy2 = new DummySensor(Configuration->Dummy2.ID);
-   }
-   else
-   {
-      Dummy2 = new OpenALRF::ProxySensor(Configuration->Dummy2.ID);
-      SensorBus->Subscribe(reinterpret_cast<OpenALRF::ISensor3DBusListener *>(Dummy2));
-   }
-   Sensors.push_back(Dummy2);
+   Sensors.push_back(Gyroscope1.get());
 }
 
 AudacityRover::Modules::~Modules()
@@ -215,29 +233,8 @@ AudacityRover::Modules::~Modules()
    LOGCUSTOM("PANIC!");
 
    Sensors.clear();
-
-   delete Dummy1;
-   delete Dummy2;
-
-   //delete Humidity1;
-   //delete Barometer1;
-   delete Temperature1;
-   delete Magnometer1;
-   delete Gyroscope1;
-   delete Accelerometer1;
-
-   delete Cat;
-   delete CommandQueue;
-   delete Auto;
-   delete Pilot;
-   delete MainCamera;
-   delete SensorTransmitter;
-   delete SensorReceiver;
-   delete SensorBus;
-   delete System;
-   delete GoPiGoMainBoard;
-
-   delete Logging;
+   SensorBus->ClearSubscribers();
+   SensorReceiver->Disconnect();
 }
 
 AudacityRover::Modules * AudacityRover::Modules::Instance()
@@ -253,23 +250,23 @@ AudacityRover::Modules * AudacityRover::Modules::Instance()
 std::string AudacityRover::Modules::GetStatusInfo() const
 {
    std::string info;
-   info += GetModuleInfoXML("System", System);
-   info += GetModuleInfoXML("Pilot", Pilot);
-   info += GetModuleInfoXML("Auto", Auto);
-   info += GetModuleInfoXML("MainCamera", MainCamera);
-   info += GetModuleInfoXML("SensorBus", SensorBus);
-   info += GetModuleInfoXML("CommandQueue", CommandQueue);
-   info += GetModuleInfoXML("Comm", Comm);
-   info += GetModuleInfoXML("Accelerometer1", Accelerometer1);
-   info += GetModuleInfoXML("Gyroscope1", Gyroscope1);
-   info += GetModuleInfoXML("Magnometer1", Magnometer1);
-   info += GetModuleInfoXML("Temperature1", Temperature1);
+   info += GetModuleInfoXML("System", System.get());
+   info += GetModuleInfoXML("Pilot", Pilot.get());
+   info += GetModuleInfoXML("Auto", Auto.get());
+   info += GetModuleInfoXML("MainCamera", MainCamera.get());
+   info += GetModuleInfoXML("SensorBus", SensorBus.get());
+   info += GetModuleInfoXML("CommandQueue", CommandQueue.get());
+   info += GetModuleInfoXML("Comm", Comm.get());
+   info += GetModuleInfoXML("Accelerometer1", Accelerometer1.get());
+   info += GetModuleInfoXML("Gyroscope1", Gyroscope1.get());
+   info += GetModuleInfoXML("Magnometer1", Magnometer1.get());
+   info += GetModuleInfoXML("Temperature1", Temperature1.get());
 //   info += GetModuleInfoXML("Barometer1", Barometer1);
 //   info += GetModuleInfoXML("Humidity1", Humidity1);
-   info += GetModuleInfoXML("SystemTemp1", SystemTemp1);
-   info += GetModuleInfoXML("SystemTemp2", SystemTemp2);
-   info += GetModuleInfoXML("Dummy1", Dummy1);
-   info += GetModuleInfoXML("Dummy2", Dummy2);
+   info += GetModuleInfoXML("SystemTemp1", SystemTemp1.get());
+   info += GetModuleInfoXML("SystemTemp2", SystemTemp2.get());
+   info += GetModuleInfoXML("Dummy1", Dummy1.get());
+   info += GetModuleInfoXML("Dummy2", Dummy2.get());
 
    return info;
 }

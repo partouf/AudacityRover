@@ -45,8 +45,8 @@ void AudacityRover::RemotePilotGoPiGo::Forward(OpenALRF::distance_t ADistance)
 {
    ReconnectIfNeeded();
 
-   auto Wheels = Modules::Instance()->Wheels;
-   auto Encoders = Modules::Instance()->Encoders;
+   auto Wheels = Modules::Instance()->Wheels.get();
+   auto Encoders = Modules::Instance()->Encoders.get();
 
    Wheels->SetSpeedBothMotors(255);
 
@@ -65,8 +65,8 @@ void AudacityRover::RemotePilotGoPiGo::MovementCheckLoop()
    GoPiGo::encoderpulses_t D1 = -1, D2 = -1;
    int LoopDuplicates = 0;
 
-   auto Wheels = Modules::Instance()->Wheels;
-   auto Encoders = Modules::Instance()->Encoders;
+   auto Wheels = Modules::Instance()->Wheels.get();
+   auto Encoders = Modules::Instance()->Encoders.get();
 
    auto T0 = steady_clock::now();
 
@@ -123,8 +123,8 @@ void AudacityRover::RemotePilotGoPiGo::Backward(OpenALRF::distance_t ADistance)
 {
    ReconnectIfNeeded();
 
-   auto Wheels = Modules::Instance()->Wheels;
-   auto Encoders = Modules::Instance()->Encoders;
+   auto Wheels = Modules::Instance()->Wheels.get();
+   auto Encoders = Modules::Instance()->Encoders.get();
 
    Wheels->SetSpeedBothMotors(255);
 
@@ -154,8 +154,8 @@ void AudacityRover::RemotePilotGoPiGo::Left(OpenALRF::degrees_t AAngle)
 
    this->ReconnectIfNeeded();
 
-   auto Wheels = Modules::Instance()->Wheels;
-   auto Encoders = Modules::Instance()->Encoders;
+   auto Wheels = Modules::Instance()->Wheels.get();
+   auto Encoders = Modules::Instance()->Encoders.get();
 
    Wheels->SetSpeedMotor1(0);
    Wheels->SetSpeedMotor2(255);
@@ -181,8 +181,8 @@ void AudacityRover::RemotePilotGoPiGo::Right(OpenALRF::degrees_t AAngle)
 {
    this->ReconnectIfNeeded();
 
-   auto Wheels = Modules::Instance()->Wheels;
-   auto Encoders = Modules::Instance()->Encoders;
+   auto Wheels = Modules::Instance()->Wheels.get();
+   auto Encoders = Modules::Instance()->Encoders.get();
 
    Wheels->SetSpeedMotor1(255);
    Wheels->SetSpeedMotor2(0);
@@ -203,7 +203,7 @@ void AudacityRover::RemotePilotGoPiGo::Stop()
 {
    ReconnectIfNeeded();
 
-   auto Wheels = Modules::Instance()->Wheels;
+   auto Wheels = Modules::Instance()->Wheels.get();
 
    Wheels->Stop();
 }
