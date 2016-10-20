@@ -3,6 +3,7 @@
 #include "../System/Configuration.h"
 #include <Groundfloor/Molecules/String.h>
 #include <stdexcept>
+#include <sstream>
 
 void AudacityRover::SensorDataServer::CleanupDisconnectedClients()
 {
@@ -24,36 +25,10 @@ void AudacityRover::SensorDataServer::CleanupDisconnectedClients()
 
 Groundfloor::String AudacityRover::SensorDataServer::SensorDataToString(const OpenALRF::SensorBusData3D ABusData)
 {
-   Groundfloor::String Data;
+   std::ostringstream buffer;
+   buffer << ABusData;
 
-   // SOH
-   Data.append(1);
-
-   Data.append(ABusData.ID);
-   Data.append(ABusData.Type & 0xff);
-   Data.append(ABusData.UnitUsed & 0xff);
-
-   // note; as you can see by the memcpy, the architectures of server/client needs to be the same
-   //  should probably rewritten to maskshift byte writing
-
-   char data64bits[8];
-
-   memcpy(data64bits, &ABusData.Data.Timestamp, 8);
-   Data.append(data64bits, 8);
-
-   memcpy(data64bits, &ABusData.Data.Data1, 8);
-   Data.append(data64bits, 8);
-
-   memcpy(data64bits, &ABusData.Data.Data2, 8);
-   Data.append(data64bits, 8);
-
-   memcpy(data64bits, &ABusData.Data.Data3, 8);
-   Data.append(data64bits, 8);
-
-   // ETB
-   Data.append(23);
-
-   return Data;
+   return buffer.str();
 }
 
 AudacityRover::SensorDataServer::SensorDataServer() : Jumpropes::ThreadedServer()
