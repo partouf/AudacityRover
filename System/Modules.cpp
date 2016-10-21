@@ -23,7 +23,7 @@
 #include <GoPiGo/OS/linux.h>
 #endif
 
-AudacityRover::Modules *ModulesInstance = nullptr;
+std::unique_ptr<AudacityRover::Modules> ModulesInstance = nullptr;
 
 std::string AudacityRover::Modules::GetModuleInfoXML(const std::string AModuleName, const OpenALRF::IModule *AModule) const
 {
@@ -241,10 +241,10 @@ AudacityRover::Modules * AudacityRover::Modules::Instance()
 {
    if (ModulesInstance == nullptr)
    {
-      ModulesInstance = new Modules();
+      ModulesInstance = std::make_unique<Modules>();
    }
 
-   return ModulesInstance;
+   return ModulesInstance.get();
 }
 
 std::string AudacityRover::Modules::GetStatusInfo() const
