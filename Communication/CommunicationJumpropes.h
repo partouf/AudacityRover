@@ -24,8 +24,6 @@ namespace AudacityRover
 
       void newMessageReceived(const String * sMessage) override;
 
-      OpenALRF::OrderedCommand ReadNextCommand(String *AData);
-
       void ReplyBinaryOK();
       void ReplyBinaryFail();
       void ReplyHTTPOK();
@@ -35,6 +33,8 @@ namespace AudacityRover
       Groundfloor::String GetHTTPHeaderForFile(const Groundfloor::String * AFile);
    public:
       Connection(Jumpropes::BaseSocket * AClient, Receiver *AReceiver);
+
+      static OpenALRF::OrderedCommand ReadNextCommand(String *AData);
 
       bool IsConnected() const;
    };

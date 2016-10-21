@@ -11,6 +11,8 @@
 #include "../System/Modules.h"
 #include "../System/Logging.h"
 
+#include <OpenALRF/Common/MemUtils.h>
+
 AudacityRover::CommunicationJumpropes::CommunicationJumpropes() : OpenALRF::ICommunication()
 {
    this->Server.startListening(Configuration::Instance()->CommandServerPort);
@@ -114,7 +116,7 @@ void AudacityRover::Connection::newMessageReceived(const String * sMessage)
       Groundfloor::String url(sMessage->getPointer(4) + 1, httppos - 6);
       std::cout << url.getValue() << std::endl;
 
-      OpenALRF::Command StrCmd{OpenALRF::modVoid, OpenALRF::actVoid, 0, 0, ""};
+      OpenALRF::Command StrCmd{OpenALRF::modVoid, OpenALRF::actVoid, 0, 0, 0, ""};
 
       Groundfloor::Vector SplitURL;
       Groundfloor::split_p(&SplitURL, &url, "/", 5);
@@ -202,46 +204,46 @@ void AudacityRover::Connection::newMessageReceived(const String * sMessage)
 
 OpenALRF::OrderedCommand AudacityRover::Connection::ReadNextCommand(String * AData)
 {
-   OpenALRF::OrderedCommand BinCmd{ 0, OpenALRF::ordAny, { OpenALRF::modVoid, OpenALRF::actVoid, 0, 0, "" } };
+   OpenALRF::OrderedCommand BinCmd{ 0, OpenALRF::ordAny, { OpenALRF::modVoid, OpenALRF::actVoid, 0, 0, 0, "" } };
 
    unsigned skipcount = 0;
 
-   char *msg = nullptr;
+   unsigned char *msg = nullptr;
    if (AData->startsWith_ansi("BINCMD"))
    {
-      msg = AData->getPointer(6);
+      msg = reinterpret_cast<unsigned char*>(AData->getPointer(6));
       skipcount = 6;
    }
    else if (AData->startsWith_ansi("BATCHCMD"))
    {
-      msg = AData->getPointer(8);
+      msg = reinterpret_cast<unsigned char*>(AData->getPointer(8));
       BinCmd.Order = (msg[0] << 8) | msg[1];
       BinCmd.Type = OpenALRF::ordAny;
 
-      msg = AData->getPointer(10);
+      msg = reinterpret_cast<unsigned char*>(AData->getPointer(10));
       skipcount = 9;
    }
    else if (AData->startsWith_ansi("BATCHBEG"))
    {
-      msg = AData->getPointer(8);
+      msg = reinterpret_cast<unsigned char*>(AData->getPointer(8));
       BinCmd.Order = (msg[0] << 8) | msg[1];
       BinCmd.Type = OpenALRF::ordStart;
 
-      msg = AData->getPointer(10);
+      msg = reinterpret_cast<unsigned char*>(AData->getPointer(10));
       skipcount = 9;
    }
    else if (AData->startsWith_ansi("BATCHEND"))
    {
-      msg = AData->getPointer(8);
+      msg = reinterpret_cast<unsigned char*>(AData->getPointer(8));
       BinCmd.Order = (msg[0] << 8) | msg[1];
       BinCmd.Type = OpenALRF::ordStop;
 
-      msg = AData->getPointer(10);
+      msg = reinterpret_cast<unsigned char*>(AData->getPointer(10));
       skipcount = 9;
    }
    else
    {
-      msg = AData->getPointer(0);
+      msg = reinterpret_cast<unsigned char*>(AData->getPointer(0));
    }
 
    uint32_t cmdlen = (msg[0] << 24) | (msg[1] << 16) | (msg[2] << 8) | msg[3];
@@ -258,11 +260,16 @@ OpenALRF::OrderedCommand AudacityRover::Connection::ReadNextCommand(String * ADa
          {
             BinCmd.Cmd.param2 = static_cast<int16_t>(msg[10] << 8 | msg[11]);
 
-            BinCmd.Cmd.param3 = "";
-            if (cmdlen > 12)
+            if (cmdlen >= 20)
             {
-               Groundfloor::String StrParam(sMessage->getPointer(12), cmdlen - 12);
-               BinCmd.Cmd.param3.append(StrParam.getValue(), StrParam.getLength());
+               OpenALRF::CopyMem(msg + 12, &BinCmd.Cmd.ExecutionTime);
+
+               BinCmd.Cmd.param3 = "";
+               if (cmdlen > 20)
+               {
+                  Groundfloor::String StrParam(msg + 20, cmdlen - 16);
+                  BinCmd.Cmd.param3.append(StrParam.getValue(), StrParam.getLength());
+               }
             }
          }
       }
