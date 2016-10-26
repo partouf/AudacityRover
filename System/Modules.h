@@ -16,6 +16,8 @@
 #include "../System/Logging.h"
 #include "../System/WatchCat.h"
 
+#include <memory>
+
 namespace AudacityRover
 {
    class Modules
