@@ -13,3 +13,6 @@
 [submodule "lib/cpp-sense-hat"]
 	path = lib/cpp-sense-hat
 	url = git://github.com/partouf/cpp-sense-hat.git
+[submodule "lib/cryptopp"]
+	path = lib/cryptopp
+	url = https://github.com/weidai11/cryptopp.git
