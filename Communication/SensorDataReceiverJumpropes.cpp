@@ -1,16 +1,22 @@
-#include "SensorDataReceiver.h"
+#include "SensorDataReceiverJumpropes.h"
 
 #include <OpenALRF/Communication/SensorBusTypes.h>
 #include <Jumpropes/Functions.h>
+#include <Jumpropes/Initialize.h>
 #include "../System/Configuration.h"
-#include "../System/Modules.h"
+#include "../System/Logging.h"
 #include <iostream>
 #include <OpenALRF/Common/Timing.h>
-#include <inttypes.h>
+#include <cinttypes>
 
-AudacityRover::SensorDataReceiver::SensorDataReceiver(const string AIPAddress)
+AudacityRover::SensorDataReceiver::SensorDataReceiver(const string AIPAddress, OpenALRF::SensorBus *SensorBus)
 {
+   this->SensorBus = SensorBus;
    if (AIPAddress.find('.') != -1)
+   {
+      Address.setValue(AIPAddress);
+   }
+   else if (AIPAddress == "localhost")
    {
       Address.setValue(AIPAddress);
    }
@@ -32,6 +38,12 @@ bool AudacityRover::SensorDataReceiver::Connect()
    else
    {
       std::cerr << "Cannot resolve " << Address.getValue() << std::endl;
+
+      if (!Jumpropes::isJumpropesInitialized())
+      {
+         std::cerr << "Have you called Jumpropes::initJumpropes() ?" << std::endl;
+      }
+
       return false;
    }
 
@@ -44,7 +56,7 @@ bool AudacityRover::SensorDataReceiver::Connect()
       {
         LOGCUSTOM("But connection is not connected???");
       }
-      Thread = new SensorDataConnection(&Connection);
+      Thread = new SensorDataConnection(&Connection, SensorBus);
       Thread->start();
 
       return true;
@@ -109,7 +121,7 @@ void AudacityRover::SensorDataConnection::ProcessBuffer()
 
          Buffer.remove(0, 36);
 
-         Modules::Instance()->SensorBus->Broadcast(SensorData);
+         SensorBus->Broadcast(SensorData);
       }
    }
 }
@@ -119,10 +131,12 @@ void AudacityRover::SensorDataConnection::StillHere()
    LastTimeDataReceived = OpenALRF::GetCurrentTimestamp();
 }
 
-AudacityRover::SensorDataConnection::SensorDataConnection(Jumpropes::BaseSocket * aSocket) : Jumpropes::ThreadedConnection(aSocket)
+AudacityRover::SensorDataConnection::SensorDataConnection(Jumpropes::BaseSocket * aSocket, OpenALRF::SensorBus *aSensorBus) : Jumpropes::ThreadedConnection(aSocket)
 {
    StillHere();
    DeclaredDeadAfter = Configuration::Instance()->SecondsWhenToDeclareConnectionDead;
+
+   SensorBus = aSensorBus;
 }
 
 void AudacityRover::SensorDataConnection::newMessageReceived(const String * sMessage)

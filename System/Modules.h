@@ -16,7 +16,11 @@
 #include "../System/Logging.h"
 #include "../System/WatchCat.h"
 
+#include <Groundfloor/Molecules/String.h>
+
 #include <memory>
+
+//#include <gsl/gsl>
 
 namespace AudacityRover
 {
@@ -60,7 +64,7 @@ namespace AudacityRover
 
       std::unique_ptr<AudacityRover::WatchCat> Cat;
       std::unique_ptr<OpenALRF::ISensor3DBusListener> SensorTransmitter;
-      std::unique_ptr<AudacityRover::SensorDataReceiver> SensorReceiver;
+      std::unique_ptr<AudacityRover::ISensorDataReceiver> SensorReceiver;
 
       std::unique_ptr<OpenALRF::ISensor> Accelerometer1;
       std::unique_ptr<OpenALRF::ISensor> Gyroscope1;
