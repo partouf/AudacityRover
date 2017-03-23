@@ -3,6 +3,7 @@
 
 AudacityRover::GyroscopeSenseHAT::GyroscopeSenseHAT(OpenALRF::sensorid_t AIdentifier) : SenseHATSensor::SenseHATSensor(AIdentifier)
 {
+   UsedUnit = OpenALRF::unitDegrees;
 }
 
 bool AudacityRover::GyroscopeSenseHAT::NextValue(OpenALRF::Sensor3DData & AValue)

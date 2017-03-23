@@ -1,4 +1,4 @@
-#include "Logging.h"
+#include "LoggingStdout.h"
 
 #include <OpenALRF/Common/Timing.h>
 #include <iostream>

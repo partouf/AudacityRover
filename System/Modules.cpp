@@ -1,12 +1,14 @@
 #include "Modules.h"
 
 #include "../System/SystemAudacity.h"
+#include "../System/LoggingStdout.h"
 #include "../Pilot/RemotePilotGoPiGo.h"
 #include "../Camera/CameraRaspi.h"
 #include "../Command/CommandQueueDefault.h"
 #include "../Communication/CommunicationJumpropes.h"
 #include "../Communication/SensorDataTransmitter.h"
 #include "../Communication/SensorDataReceiver.h"
+#include "../Communication/SensorDataReceiverJumpropes.h"
 #include <Jumpropes/Functions.h>
 #include <OpenALRF/Sensors/ProxySensor.h>
 #include "../Sensors/AccelerometerSenseHAT.h"
@@ -102,7 +104,7 @@ void AudacityRover::Modules::LinkGoPiGo(Groundfloor::String &Computername, Audac
       Pilot = std::make_unique<AudacityRover::RemotePilotGoPiGo>();
       Auto = nullptr;// new AutoPilotDefault();
 
-      SensorReceiver = std::make_unique<AudacityRover::SensorDataReceiver>(AConfiguration->RTIMU);
+      SensorReceiver = std::make_unique<AudacityRover::SensorDataReceiver>(AConfiguration->RTIMU, SensorBus.get());
    }
    else
    {
@@ -112,7 +114,7 @@ void AudacityRover::Modules::LinkGoPiGo(Groundfloor::String &Computername, Audac
       Pilot = nullptr;
       Auto = nullptr;
 
-      SensorReceiver = std::make_unique<AudacityRover::SensorDataReceiver>(AConfiguration->GoPiGo);
+      SensorReceiver = std::make_unique<AudacityRover::SensorDataReceiver>(AConfiguration->GoPiGo, SensorBus.get());
    }
 }
 
