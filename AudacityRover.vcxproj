@@ -144,7 +144,7 @@
     <ClCompile Include="Camera\CameraRaspi.cpp" />
     <ClCompile Include="Command\CommandQueueDefault.cpp" />
     <ClCompile Include="Communication\CommunicationJumpropes.cpp" />
-    <ClCompile Include="Communication\SensorDataReceiver.cpp" />
+    <ClCompile Include="Communication\SensorDataReceiverJumpropes.cpp" />
     <ClCompile Include="Communication\SensorDataTransmitter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pilot\RemotePilotGoPiGo.cpp" />
@@ -156,7 +156,7 @@
     <ClCompile Include="Sensors\SystemTempSensor.cpp" />
     <ClCompile Include="Sensors\TemperatureSenseHAT.cpp" />
     <ClCompile Include="System\Configuration.cpp" />
-    <ClCompile Include="System\Logging.cpp" />
+    <ClCompile Include="System\LoggingStdout.cpp" />
     <ClCompile Include="System\Modules.cpp" />
     <ClCompile Include="System\SystemAudacity.cpp" />
     <ClCompile Include="System\WatchCat.cpp" />
@@ -177,6 +177,7 @@
     <ClInclude Include="Sensors\DummySensor.h" />
     <ClInclude Include="System\Configuration.h" />
     <ClInclude Include="System\Logging.h" />
+    <ClInclude Include="System\LoggingStdout.h" />
     <ClInclude Include="System\Modules.h" />
     <ClInclude Include="System\SystemAudacity.h" />
     <ClInclude Include="System\WatchCat.h" />

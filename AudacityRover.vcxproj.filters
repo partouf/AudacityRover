@@ -69,9 +69,6 @@
     <ClInclude Include="Communication\SensorDataTransmitter.h">
       <Filter>Header Files\Communication</Filter>
     </ClInclude>
-    <ClInclude Include="System\Logging.h">
-      <Filter>Header Files\System</Filter>
-    </ClInclude>
     <ClInclude Include="Sensors\TemperatureSenseHAT.h">
       <Filter>Header Files\Sensors</Filter>
     </ClInclude>
@@ -103,7 +100,13 @@
       <Filter>Header Files\Sensors</Filter>
     </ClInclude>
     <ClInclude Include="Sensors\SystemTempSensor.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="System\LoggingStdout.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Logging.h">
+      <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -128,17 +131,11 @@
     <ClCompile Include="Communication\SensorDataTransmitter.cpp">
       <Filter>Source Files\Communication</Filter>
     </ClCompile>
-    <ClCompile Include="System\Logging.cpp">
-      <Filter>Source Files\System</Filter>
-    </ClCompile>
     <ClCompile Include="Sensors\TemperatureSenseHAT.cpp">
       <Filter>Source Files\Sensors</Filter>
     </ClCompile>
     <ClCompile Include="System\WatchCat.cpp">
       <Filter>Source Files\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Communication\SensorDataReceiver.cpp">
-      <Filter>Source Files\Communication</Filter>
     </ClCompile>
     <ClCompile Include="System\Configuration.cpp">
       <Filter>Source Files\System</Filter>
@@ -163,6 +160,12 @@
     </ClCompile>
     <ClCompile Include="Sensors\SystemTempSensor.cpp">
       <Filter>Source Files\Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="Communication\SensorDataReceiverJumpropes.cpp">
+      <Filter>Source Files\Communication</Filter>
+    </ClCompile>
+    <ClCompile Include="System\LoggingStdout.cpp">
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
