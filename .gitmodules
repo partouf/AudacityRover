@@ -16,3 +16,6 @@
 [submodule "lib/cryptopp"]
 	path = lib/cryptopp
 	url = https://github.com/weidai11/cryptopp.git
+[submodule "lib/wslay"]
+	path = lib/wslay
+	url = https://github.com/partouf/wslay.git
