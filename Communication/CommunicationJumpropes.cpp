@@ -116,7 +116,7 @@ void AudacityRover::Connection::newMessageReceived(const String * sMessage)
       Groundfloor::String url(sMessage->getPointer(4) + 1, httppos - 6);
       std::cout << url.getValue() << std::endl;
 
-      OpenALRF::Command StrCmd{OpenALRF::modVoid, OpenALRF::actVoid, 0, 0, 0, ""};
+      OpenALRF::Command StrCmd{OpenALRF::Module::Void, OpenALRF::Action::Void, 0, 0, 0, ""};
 
       Groundfloor::Vector SplitURL;
       Groundfloor::split_p(&SplitURL, &url, "/", 5);
@@ -144,10 +144,10 @@ void AudacityRover::Connection::newMessageReceived(const String * sMessage)
          }
          else
          {
-            StrCmd.Module = static_cast<OpenALRF::module_t>(Val.asInteger());
+            StrCmd.Module = static_cast<OpenALRF::Module>(Val.asInteger());
 
             Val.setString(static_cast<Groundfloor::String *>(SplitURL.elementAt(1)));
-            StrCmd.Action = static_cast<OpenALRF::action_t>(Val.asInteger());
+            StrCmd.Action = static_cast<OpenALRF::Action>(Val.asInteger());
 
             if (SplitURL.size() >= 3)
             {
@@ -184,7 +184,7 @@ void AudacityRover::Connection::newMessageReceived(const String * sMessage)
    if (ReceptionBuffer.getLength() > 0)
    {
       auto BinCmd = this->ReadNextCommand(&ReceptionBuffer);
-      while (BinCmd.Cmd.Action != OpenALRF::actVoid)
+      while (BinCmd.Cmd.Action != OpenALRF::Action::Void)
       {
          if (BinCmd.Order == 0)
          {
@@ -204,7 +204,7 @@ void AudacityRover::Connection::newMessageReceived(const String * sMessage)
 
 OpenALRF::OrderedCommand AudacityRover::Connection::ReadNextCommand(String * AData)
 {
-   OpenALRF::OrderedCommand BinCmd{ 0, OpenALRF::ordAny, { OpenALRF::modVoid, OpenALRF::actVoid, 0, 0, 0, "" } };
+   OpenALRF::OrderedCommand BinCmd{ 0, OpenALRF::Order::Any, { OpenALRF::Module::Void, OpenALRF::Action::Void, 0, 0, 0, "" } };
 
    unsigned skipcount = 0;
 
@@ -218,7 +218,7 @@ OpenALRF::OrderedCommand AudacityRover::Connection::ReadNextCommand(String * ADa
    {
       msg = reinterpret_cast<unsigned char*>(AData->getPointer(8));
       BinCmd.Order = (msg[0] << 8) | msg[1];
-      BinCmd.Type = OpenALRF::ordAny;
+      BinCmd.Type = OpenALRF::Order::Any;
 
       msg = reinterpret_cast<unsigned char*>(AData->getPointer(10));
       skipcount = 9;
@@ -227,7 +227,7 @@ OpenALRF::OrderedCommand AudacityRover::Connection::ReadNextCommand(String * ADa
    {
       msg = reinterpret_cast<unsigned char*>(AData->getPointer(8));
       BinCmd.Order = (msg[0] << 8) | msg[1];
-      BinCmd.Type = OpenALRF::ordStart;
+      BinCmd.Type = OpenALRF::Order::Start;
 
       msg = reinterpret_cast<unsigned char*>(AData->getPointer(10));
       skipcount = 9;
@@ -236,7 +236,7 @@ OpenALRF::OrderedCommand AudacityRover::Connection::ReadNextCommand(String * ADa
    {
       msg = reinterpret_cast<unsigned char*>(AData->getPointer(8));
       BinCmd.Order = (msg[0] << 8) | msg[1];
-      BinCmd.Type = OpenALRF::ordStop;
+      BinCmd.Type = OpenALRF::Order::Stop;
 
       msg = reinterpret_cast<unsigned char*>(AData->getPointer(10));
       skipcount = 9;
@@ -250,8 +250,8 @@ OpenALRF::OrderedCommand AudacityRover::Connection::ReadNextCommand(String * ADa
 
    if (cmdlen >= 8)
    {
-      BinCmd.Cmd.Module = static_cast<OpenALRF::module_t>(msg[4] << 8 | msg[5]);
-      BinCmd.Cmd.Action = static_cast<OpenALRF::action_t>(msg[6] << 8 | msg[7]);
+      BinCmd.Cmd.Module = static_cast<OpenALRF::Module>(msg[4] << 8 | msg[5]);
+      BinCmd.Cmd.Action = static_cast<OpenALRF::Action>(msg[6] << 8 | msg[7]);
 
       if (cmdlen >= 10)
       {

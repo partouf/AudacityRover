@@ -7,9 +7,9 @@ void AudacityRover::WatchCat::MinorAct()
 {
    auto Queue = Modules::Instance()->CommandQueue.get();
 
-   Queue->Add({ OpenALRF::modSystem, OpenALRF::actSystemRestartNetIF, 0, 0, 0, "eth0" });
-   Queue->Add({ OpenALRF::modSystem, OpenALRF::actSystemRestartNetIF, 0, 0, 0, "wlan0" });
-   Queue->Add({ OpenALRF::modCamera, OpenALRF::actCameraCapture, 0, 0, 0, "" });
+   Queue->Add({ OpenALRF::Module::System, OpenALRF::Action::SystemRestartNetIF, 0, 0, 0, "eth0" });
+   Queue->Add({ OpenALRF::Module::System, OpenALRF::Action::SystemRestartNetIF, 0, 0, 0, "wlan0" });
+   Queue->Add({ OpenALRF::Module::Camera, OpenALRF::Action::CameraCapture, 0, 0, 0, "" });
 
    ActCount++;
 }
@@ -18,7 +18,7 @@ void AudacityRover::WatchCat::MajorAct()
 {
    ActCount++;
 
-   Modules::Instance()->CommandQueue->Add({ OpenALRF::modSystem, OpenALRF::actSystemReboot, 0, 0, 0, "" });
+   Modules::Instance()->CommandQueue->Add({ OpenALRF::Module::System, OpenALRF::Action::SystemReboot, 0, 0, 0, "" });
 }
 
 void AudacityRover::WatchCat::CheckAndAct()

@@ -25,61 +25,61 @@ void AudacityRover::CommandQueue::DoCommand(OpenALRF::Command ACmd)
    auto System = Modules::Instance()->System.get();
    auto MainCamera = Modules::Instance()->MainCamera.get();
 
-   if (ACmd.Module == OpenALRF::modSystem)
+   if (ACmd.Module == OpenALRF::Module::System)
    {
-      if (ACmd.Action == OpenALRF::actSystemReboot)
+      if (ACmd.Action == OpenALRF::Action::SystemReboot)
       {
          System->RebootNow();
       }
-      else if (ACmd.Action == OpenALRF::actSystemRestartNetIF)
+      else if (ACmd.Action == OpenALRF::Action::SystemRestartNetIF)
       {
          System->RestartNetworkInterface(ACmd.param3);
       }
-      else if (ACmd.Action == OpenALRF::actSystemInfoReport)
+      else if (ACmd.Action == OpenALRF::Action::SystemInfoReport)
       {
          // todo: redo module system so we can gather info on all modules and use the Comm system here
       }
-      else if (ACmd.Action == OpenALRF::actSystemResume)
+      else if (ACmd.Action == OpenALRF::Action::SystemResume)
       {
          DoResume();
       }
-      else if (ACmd.Action == OpenALRF::actSystemWait)
+      else if (ACmd.Action == OpenALRF::Action::SystemWait)
       {
          DoWait();
       }
-      else if (ACmd.Action == OpenALRF::actSystemStop)
+      else if (ACmd.Action == OpenALRF::Action::SystemStop)
       {
          DoStop();
       }
    }
-   else if (ACmd.Module == OpenALRF::modCamera)
+   else if (ACmd.Module == OpenALRF::Module::Camera)
    {
-      if (ACmd.Action == OpenALRF::actCameraCapture)
+      if (ACmd.Action == OpenALRF::Action::CameraCapture)
       {
          MainCamera->TakePicture();
       }
    }
-   else if (ACmd.Module == OpenALRF::modRemotePilot)
+   else if (ACmd.Module == OpenALRF::Module::RemotePilot)
    {
       if (Pilot != nullptr)
       {
-         if (ACmd.Action == OpenALRF::actRemotePilotForward)
+         if (ACmd.Action == OpenALRF::Action::RemotePilotForward)
          {
             Pilot->Forward(static_cast<OpenALRF::distance_t>(ACmd.param1));
          }
-         else if (ACmd.Action == OpenALRF::actRemotePilotBackward)
+         else if (ACmd.Action == OpenALRF::Action::RemotePilotBackward)
          {
             Pilot->Backward(static_cast<OpenALRF::distance_t>(ACmd.param1));
          }
-         else if (ACmd.Action == OpenALRF::actRemotePilotLeft)
+         else if (ACmd.Action == OpenALRF::Action::RemotePilotLeft)
          {
             Pilot->Left(static_cast<OpenALRF::distance_t>(ACmd.param1));
          }
-         else if (ACmd.Action == OpenALRF::actRemotePilotRight)
+         else if (ACmd.Action == OpenALRF::Action::RemotePilotRight)
          {
             Pilot->Right(static_cast<OpenALRF::distance_t>(ACmd.param1));
          }
-         else if (ACmd.Action == OpenALRF::actRemotePilotStop)
+         else if (ACmd.Action == OpenALRF::Action::RemotePilotStop)
          {
             Pilot->Stop();
          }
@@ -91,17 +91,17 @@ void AudacityRover::CommandQueue::DoCommand(OpenALRF::Command ACmd)
 void AudacityRover::CommandQueue::DoStop()
 {
    Modules::Instance()->Pilot->Stop();
-   Modules::Instance()->System->ChangeStatus(OpenALRF::statStopped);
+   Modules::Instance()->System->ChangeStatus(OpenALRF::Status::Stopped);
 }
 
 void AudacityRover::CommandQueue::DoWait()
 {
-   Modules::Instance()->System->ChangeStatus(OpenALRF::statWaiting);
+   Modules::Instance()->System->ChangeStatus(OpenALRF::Status::Waiting);
 }
 
 void AudacityRover::CommandQueue::DoResume()
 {
-   Modules::Instance()->System->ChangeStatus(OpenALRF::statRunning);
+   Modules::Instance()->System->ChangeStatus(OpenALRF::Status::Running);
 }
 
 AudacityRover::CommandQueue::CommandQueue() : ICommandQueue()

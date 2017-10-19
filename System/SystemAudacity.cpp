@@ -29,13 +29,13 @@ std::string AudacityRover::SystemAudacity::GetStatusInfo() const
    std::string suggeststatusstr = "";
 
    switch (CurrentStatus()) {
-   case OpenALRF::statStopped:
+   case OpenALRF::Status::Stopped:
       suggeststatusstr = "stopped";
       break;
-   case OpenALRF::statRunning:
+   case OpenALRF::Status::Running:
       suggeststatusstr = "running";
       break;
-   case OpenALRF::statWaiting:
+   case OpenALRF::Status::Waiting:
       suggeststatusstr = "waiting";
       break;
    }

@@ -23,7 +23,7 @@ void RebootSystem()
 {
    auto Queue = AudacityRover::Modules::Instance()->CommandQueue.get();
 
-   Queue->Add({ OpenALRF::modSystem, OpenALRF::actSystemReboot });
+   Queue->Add({ OpenALRF::Module::System, OpenALRF::Action::SystemReboot });
    Queue->Process();
 }
 
@@ -45,13 +45,13 @@ int main()
          try
          {
             auto Modules = AudacityRover::Modules::Instance();
-            Modules->System->ChangeStatus(OpenALRF::statRunning);
+            Modules->System->ChangeStatus(OpenALRF::Status::Running);
             while (!Modules->System->ShouldQuit())
             {
                Modules->Comm->Process();
                Modules->CommandQueue->Process();
 
-               if (Modules->System->CurrentStatus() == OpenALRF::statRunning)
+               if (Modules->System->CurrentStatus() == OpenALRF::Status::Running)
                {
                   Modules->SensorSweep();
                   Modules->Cat->Process();
@@ -79,10 +79,10 @@ int main()
          std::cout << "Goodbye!" << std::endl;
 
          /*
-         OpenALRF::Command Hello{ OpenALRF::modRemotePilot, OpenALRF::actRemotePilotForward, 2, 0 };
+         OpenALRF::Command Hello{ OpenALRF::Module::RemotePilot, OpenALRF::Action::RemotePilotForward, 2, 0 };
          Queue.Add(Hello);
 
-         OpenALRF::Command World{ OpenALRF::modCamera, OpenALRF::actCameraCapture, 0, 0 };
+         OpenALRF::Command World{ OpenALRF::Module::Camera, OpenALRF::Action::CameraCapture, 0, 0 };
          Queue.Add(World);
          */
 
